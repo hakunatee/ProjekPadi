@@ -21,12 +21,12 @@ body.loading-state { overflow: hidden; }
 ::-webkit-scrollbar-track { background: #064e3b; }
 ::-webkit-scrollbar-thumb { background: #a3e635; border-radius: 10px; border: 2px solid #064e3b; }
 
-/* --- 2. SEED TRAIL ANIMATION --- */
+/* --- SEED TRAIL ANIMATION --- */
 .seed-particle {
     position: fixed;
     width: 6px; height: 6px;
     background-color: #a3e635;
-    border-radius: 50% 0 50% 0; /* Bentuk seperti biji */
+    border-radius: 50% 0 50% 0;
     pointer-events: none;
     z-index: 9998;
     animation: seedDrop 1s forwards;
@@ -107,7 +107,7 @@ body.hovering #cursor-outline {
 }
 .reveal.active { opacity: 1; transform: translateY(0); }
 
-/* --- 5. PARALLAX TEXT --- */
+/* --- PARALLAX TEXT --- */
 .perspective-text {
     transform-style: preserve-3d;
     perspective: 1000px;
