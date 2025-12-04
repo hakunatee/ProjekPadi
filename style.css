@@ -7,7 +7,8 @@ html {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #022c22; 
+    /* BASE COLOR: EMERALD (Fresh Green) */
+    background-color: #064e3b; 
     color: #ecfdf5;
     overflow-x: hidden;
     overflow-y: auto;
@@ -20,7 +21,7 @@ body.loading-state { overflow: hidden; }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #022c22; }
+::-webkit-scrollbar-track { background: #064e3b; }
 ::-webkit-scrollbar-thumb { background: #a3e635; border-radius: 10px; }
 
 /* --- CUSTOM CURSOR --- */
@@ -51,14 +52,16 @@ body.hovering #cursor-outline {
     backdrop-filter: blur(2px);
 }
 
-/* --- DYNAMIC BACKGROUND --- */
+/* --- DYNAMIC BACKGROUND (GRADASI SEIMBANG) --- */
 .dynamic-bg {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     z-index: -2;
     background: 
-        radial-gradient(circle at 15% 50%, #064e3b 0%, #022c22 100%);
-    opacity: 0.8;
+        /* Texture Noise */
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"),
+        /* Balanced Gradient: Bright Emerald Top -> Deep Emerald Bottom */
+        radial-gradient(circle at 50% 0%, #10b981 0%, #059669 30%, #064e3b 80%);
 }
 
 /* --- NAVBAR --- */
@@ -67,9 +70,10 @@ body.hovering #cursor-outline {
     top: 0; left: 0; width: 100%;
     z-index: 999;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(2, 44, 34, 0.6);
+    /* Sedikit lebih terang dari body agar kontras */
+    background: rgba(6, 78, 59, 0.7);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-link {
@@ -89,12 +93,11 @@ body.hovering #cursor-outline {
     border: 1px solid rgba(163, 230, 53, 0.3);
     padding: 8px 20px; border-radius: 99px;
 }
-.btn-dashboard:hover { background: #a3e635; color: #022c22 !important; }
+.btn-dashboard:hover { background: #a3e635; color: #064e3b !important; }
 
 /* --- SPOTLIGHT CARD EFFECT --- */
 .spotlight-card {
     position: relative;
-    /* CSS Variables for spotlight position */
     --mouse-x: 0px;
     --mouse-y: 0px;
 }
@@ -132,7 +135,7 @@ body.hovering #cursor-outline {
 .reveal.active { opacity: 1; transform: translateY(0); }
 
 /* Colors */
-.text-accent { color: #a3e635; }
+.text-accent { color: #a3e635; } /* Lime Green */
 .bg-accent { background-color: #a3e635; }
 
 /* Preloader Hide */
