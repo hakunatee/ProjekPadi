@@ -1,8 +1,8 @@
 /**
- * ULTIMATE AGRITECH INTERACTIVITY (REFINED & FIXED)
+ * ULTIMATE AGRITECH INTERACTIVITY (FINAL)
  */
 
-// --- 1. PRELOADER & INITIALIZATION ---
+// --- 1. PRELOADER ---
 let progress = 0;
 const progressText = document.getElementById('progress-text');
 const progressBar = document.getElementById('progress-bar');
@@ -19,8 +19,6 @@ function initHeroSequence() {
 const loadingInterval = setInterval(() => {
     progress += Math.floor(Math.random() * 3) + 1;
     if (progress > 100) progress = 100;
-    
-    // Pastikan elemen ada sebelum diupdate untuk mencegah error
     if (progressText) progressText.innerText = `${progress}%`;
     if (progressBar) progressBar.style.width = `${progress}%`;
 
@@ -34,84 +32,60 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. SEED TRAIL EFFECT (JEJAK BENIH PADI) ---
+// --- 2. RESTORED MOUSE PARALLAX FOR ORBS ---
+// Menggerakkan orbs di background
 document.addEventListener('mousemove', (e) => {
-    // Throttle: Hanya buat partikel setiap beberapa frame agar tidak berat
-    if (Math.random() > 0.2) return; 
+    const orbs = document.querySelectorAll('.parallax-orb');
+    // Hitung posisi relatif mouse dari tengah layar
+    const x = (window.innerWidth - e.pageX * 2) / 100;
+    const y = (window.innerHeight - e.pageY * 2) / 100;
 
-    const seed = document.createElement('div');
-    seed.classList.add('seed-particle');
-    
-    // Styling visual butir padi langsung di sini agar lebih distinct
-    seed.style.position = 'fixed';
-    seed.style.width = '8px';
-    seed.style.height = '8px';
-    seed.style.backgroundColor = '#ffd700'; // Warna Emas (Gabah Matang)
-    seed.style.borderRadius = '80% 0 50% 0'; // Bentuk lonjong seperti biji
-    seed.style.pointerEvents = 'none';
-    seed.style.zIndex = '9998';
-    seed.style.boxShadow = '0 0 4px rgba(255, 215, 0, 0.6)'; // Glow efek
-    
-    seed.style.left = `${e.clientX}px`;
-    seed.style.top = `${e.clientY}px`;
-    
-    // Rotasi acak agar terlihat natural seperti taburan benih
-    const rotation = Math.random() * 360;
-    seed.style.transform = `rotate(${rotation}deg)`;
-    
-    // Animasi jatuh sederhana
-    seed.animate([
-        { transform: `translate(0, 0) rotate(${rotation}deg)`, opacity: 1 },
-        { transform: `translate(0, 60px) rotate(${rotation + 90}deg)`, opacity: 0 }
-    ], {
-        duration: 800,
-        easing: 'ease-in'
+    orbs.forEach(orb => {
+        const speed = orb.getAttribute('data-speed');
+        // Pindahkan orb berdasarkan kecepatan masing-masing
+        orb.style.transform = `translateX(${x * speed}px) translateY(${y * speed}px)`;
     });
-    
-    document.body.appendChild(seed);
-    
-    // Hapus elemen setelah animasi selesai
-    setTimeout(() => seed.remove(), 800);
 });
 
-// --- 3. ANIMATED COUNTERS (FIXED LOGIC) ---
+// --- 3. SEED TRAIL EFFECT ---
+document.addEventListener('mousemove', (e) => {
+    if (Math.random() > 0.15) return; 
+    const seed = document.createElement('div');
+    seed.classList.add('seed-particle');
+    seed.style.left = `${e.clientX}px`;
+    seed.style.top = `${e.clientY}px`;
+    seed.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(seed);
+    setTimeout(() => seed.remove(), 1000);
+});
+
+// --- 4. ANIMATED COUNTERS ---
 const counters = document.querySelectorAll('.counter');
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const counter = entry.target;
-            const target = +counter.getAttribute('data-target'); // Ambil angka target
-            
-            // Logika hitung berbasis durasi (2 detik)
-            const duration = 2000; 
-            const startTimestamp = performance.now();
-            
-            const step = (currentTime) => {
-                const elapsed = currentTime - startTimestamp;
-                const progress = Math.min(elapsed / duration, 1); // 0 sampai 1
-                
-                // Easing function (easeOutExpo) agar melambat di akhir
-                const easeProgress = 1 - Math.pow(2, -10 * progress);
-                
-                const currentCount = Math.floor(easeProgress * target);
-                counter.innerText = currentCount;
-
-                if (progress < 1) {
-                    requestAnimationFrame(step);
+            const target = +counter.getAttribute('data-target');
+            const duration = 2000;
+            const increment = target / (duration / 30);
+            let current = 0;
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.innerText = Math.ceil(current);
+                    requestAnimationFrame(updateCounter);
                 } else {
-                    counter.innerText = target; // Pastikan angka akhir tepat
+                    counter.innerText = target;
                 }
             };
-            
-            requestAnimationFrame(step);
-            counterObserver.unobserve(counter); // Hanya jalankan sekali
+            updateCounter();
+            counterObserver.unobserve(counter);
         }
     });
-}, { threshold: 0.1 }); // Ubah threshold jadi 0.1 (lebih sensitif) agar pasti trigger
-
+}, { threshold: 0.1 });
 counters.forEach(counter => counterObserver.observe(counter));
 
-// --- 4. AUDIO PLAYER TOGGLE ---
+// --- 5. AUDIO PLAYER TOGGLE ---
 const audioBtn = document.getElementById('audio-toggle');
 const bgMusic = document.getElementById('bg-music');
 const iconPlay = document.getElementById('icon-play');
@@ -119,34 +93,24 @@ const iconPause = document.getElementById('icon-pause');
 let isPlaying = false;
 
 if (audioBtn && bgMusic) {
-    bgMusic.volume = 0.3; // Volume background (tidak terlalu keras)
-    
+    bgMusic.volume = 0.4;
     audioBtn.addEventListener('click', () => {
         if (isPlaying) {
             bgMusic.pause();
-            if(iconPlay) iconPlay.classList.remove('hidden');
-            if(iconPause) iconPause.classList.add('hidden');
+            iconPlay.classList.remove('hidden');
+            iconPause.classList.add('hidden');
             audioBtn.classList.remove('animate-pulse');
         } else {
-            // Menggunakan Promise untuk handle autoplay policy browser
-            const playPromise = bgMusic.play();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Play sukses
-                    if(iconPlay) iconPlay.classList.add('hidden');
-                    if(iconPause) iconPause.classList.remove('hidden');
-                    audioBtn.classList.add('animate-pulse');
-                })
-                .catch(error => {
-                    console.log("Audio play blocked check browser settings or interactions");
-                });
-            }
+            bgMusic.play().catch(e => console.log("Audio autoplay blocked"));
+            iconPlay.classList.add('hidden');
+            iconPause.classList.remove('hidden');
+            audioBtn.classList.add('animate-pulse');
         }
         isPlaying = !isPlaying;
     });
 }
 
-// --- 5. SCROLL PROGRESS BAR ---
+// --- 6. SCROLL PROGRESS BAR ---
 const scrollBar = document.querySelector('.scroll-progress-bar');
 window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -155,7 +119,7 @@ window.addEventListener('scroll', () => {
     if(scrollBar) scrollBar.style.width = `${scrolled}%`;
 });
 
-// --- 6. PARALLAX TEXT ---
+// --- 7. PARALLAX TEXT ---
 const textContainer = document.querySelector('.parallax-text-container');
 const layers = document.querySelectorAll('.layer');
 if(textContainer) {
@@ -169,7 +133,7 @@ if(textContainer) {
     });
 }
 
-// --- 7. CURSOR, SPOTLIGHT, ETC ---
+// --- 8. CURSOR & SPOTLIGHT ---
 const cursorDot = document.getElementById('cursor-dot');
 const cursorOutline = document.getElementById('cursor-outline');
 const hoverTriggers = document.querySelectorAll('.hover-trigger');
