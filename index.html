@@ -16,8 +16,15 @@
         <div class="scroll-progress-bar h-full bg-[#a3e635] w-0 shadow-[0_0_10px_#a3e635]"></div>
     </div>
 
-    <!-- 2. AMBIENT AUDIO PLAYER (UPDATED: LOCAL FILE) -->
-    <!-- Pastikan file nature.mp3 ada di folder yang sama dengan index.html -->
+    <!-- 2. UTILITY BUTTONS (AUDIO & SCROLL TOP) -->
+    
+    <!-- Scroll To Top Button (New) -->
+    <!-- Muncul saat scroll, posisi di atas tombol audio -->
+    <button id="scrollToTopBtn" class="fixed bottom-24 right-8 z-[900] w-10 h-10 rounded-full bg-[#064e3b]/80 border border-[#a3e635] text-[#a3e635] flex items-center justify-center shadow-[0_0_15px_rgba(163,230,53,0.3)] hover:bg-[#a3e635] hover:text-[#064e3b] transition-all duration-300 opacity-0 pointer-events-none translate-y-10 hover:scale-110 backdrop-blur-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+
+    <!-- Audio Player -->
     <audio id="bg-music" loop>
         <source src="nature.mp3" type="audio/mpeg">
     </audio>
