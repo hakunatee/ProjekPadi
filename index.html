@@ -5,161 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Pemantauan Kerugian Pasca Panen</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="loading-state">
 
-    <!-- PRELOADER (Emerald) -->
-    <div id="preloader" class="fixed inset-0 z-[100] bg-[#064e3b] flex items-center justify-center transition-opacity duration-500">
-        <div class="text-center">
-            <div class="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p class="text-accent font-bold tracking-[0.3em] text-xs animate-pulse">MEMUAT SISTEM...</p>
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <!-- CINEMATIC PRELOADER -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-[#022c22] flex flex-col items-center justify-center text-white">
+        <div class="relative w-64 h-1 bg-white/10 rounded-full overflow-hidden mb-4">
+            <div id="progress-bar" class="absolute top-0 left-0 h-full w-0 bg-accent transition-all duration-100 ease-out"></div>
+        </div>
+        <div class="flex justify-between w-64 text-xs font-mono text-accent">
+            <span>SYSTEM INITIALIZING</span>
+            <span id="progress-text">0%</span>
         </div>
     </div>
     
+    <!-- CANVAS PARTICLES (Fireflies) -->
+    <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10"></canvas>
+    
     <div class="dynamic-bg"></div>
-    <div id="parallax-bg" class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div data-speed="2" class="parallax-orb absolute top-[-5%] left-[-5%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px]"></div>
-        <div data-speed="-1" class="parallax-orb absolute bottom-[10%] right-[-10%] w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px]"></div>
-    </div>
 
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-2 group cursor-pointer" onclick="window.scrollTo(0,0)">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 group cursor-pointer hover-trigger" onclick="window.scrollTo(0,0)">
                 <span class="w-2 h-2 bg-accent rounded-full group-hover:animate-ping"></span>
-                <span class="font-bold text-base tracking-wider text-white">AGRI<span class="text-accent">TECH</span></span>
+                <span class="font-bold text-lg tracking-wider text-white font-satoshi">AGRI<span class="text-accent">TECH</span></span>
             </div>
-            <ul class="hidden md:flex space-x-8 text-xs font-medium uppercase tracking-wide">
-                <li><a href="#home" class="nav-link">Beranda</a></li>
-                <li><a href="#analisis" class="nav-link">Analisis</a></li>
-                <li><a href="#detail-fase" class="nav-link">Penjelasan Fase</a></li>
-                <li><a href="#dashboard" class="nav-link btn-dashboard">Data</a></li>
+            <ul class="hidden md:flex space-x-8 text-xs font-medium uppercase tracking-widest">
+                <li><a href="#home" class="nav-link hover-trigger">Beranda</a></li>
+                <li><a href="#analisis" class="nav-link hover-trigger">Analisis</a></li>
+                <li><a href="#dashboard" class="nav-link hover-trigger">Data</a></li>
+                <li><a href="#profil" class="nav-link btn-dashboard hover-trigger">Tim Kami</a></li>
             </ul>
         </div>
     </nav>
 
-    <header id="home" class="pt-28 pb-10 px-6 md:px-12 container mx-auto flex flex-col md:flex-row items-center gap-10 min-h-[90vh]">
-        <div class="w-full md:w-5/12 text-left z-10 reveal">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/10 mb-4 backdrop-blur-sm">
+    <!-- HERO SECTION -->
+    <header id="home" class="pt-32 pb-10 px-6 md:px-12 container mx-auto flex flex-col md:flex-row items-center gap-12 min-h-[95vh]">
+        <div class="w-full md:w-5/12 text-left z-10">
+            <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 mb-6 backdrop-blur-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
                 <p class="text-[10px] font-bold tracking-[0.2em] text-accent uppercase">AI Powered Agriculture</p>
             </div>
             
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-4 tracking-tight">
-                Pantau <span class="text-accent relative inline-block">Rugi<svg class="absolute w-full h-2 -bottom-1 left-0 text-accent opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="3" fill="none" /></svg></span><br>
+            <h1 class="reveal-text text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight font-satoshi">
+                Pantau <span class="text-accent relative inline-block glitch-effect" data-text="Rugi">Rugi</span><br>
                 Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-200">Padi.</span>
             </h1>
             
-            <p class="text-sm text-emerald-100 font-light leading-relaxed max-w-md mb-8 opacity-90">
-                Teknologi integrasi data presisi untuk menekan *Post-Harvest Loss* dan memaksimalkan profitabilitas petani Indonesia.
+            <p class="reveal text-sm md:text-base text-emerald-100/80 font-light leading-relaxed max-w-lg mb-10">
+                Teknologi integrasi data presisi untuk menekan <em class="text-white">Post-Harvest Loss</em> dan memaksimalkan profitabilitas petani Indonesia melalui analisis real-time.
             </p>
             
-            <div class="flex gap-3">
-                <a href="#dashboard" class="group px-6 py-3 bg-accent text-[#064e3b] font-bold rounded-xl text-xs hover:scale-105 transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] flex items-center gap-2">
-                    Buka Dashboard
+            <div class="reveal flex gap-4">
+                <a href="#dashboard" class="group px-8 py-4 bg-accent text-[#064e3b] font-bold rounded-full text-xs hover:scale-105 transition-all shadow-[0_0_30px_rgba(163,230,53,0.4)] flex items-center gap-3 hover-trigger">
+                    <span>Buka Dashboard</span>
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
-                <a href="#detail-fase" class="px-6 py-3 border border-emerald-300/30 text-white rounded-xl text-xs hover:bg-white/5 transition-colors backdrop-blur-sm">
-                    Pelajari Fase
+                <a href="#profil" class="px-8 py-4 border border-emerald-300/30 text-white rounded-full text-xs hover:bg-white/5 transition-colors backdrop-blur-sm hover-trigger">
+                    Lihat Tim
                 </a>
             </div>
         </div>
 
-        <div class="w-full md:w-7/12 h-[350px] md:h-[450px] relative z-10 reveal perspective-container" style="transition-delay: 100ms;">
-            <div id="hero-tilt" class="w-full h-full rounded-[2rem] overflow-hidden border border-emerald-300/20 shadow-2xl relative bg-[#064e3b] transition-transform duration-100 ease-out">
+        <div class="w-full md:w-7/12 h-[400px] md:h-[500px] relative z-10 reveal perspective-container">
+            <div id="hero-tilt" class="w-full h-full rounded-[2.5rem] overflow-hidden border border-emerald-300/20 shadow-2xl relative bg-[#064e3b] hover-trigger">
                 <div class="slide active" style="background-image: url('slide1.jpg');"></div>
                 <div class="slide" style="background-image: url('slide2.jpg');"></div>
                 <div class="slide" style="background-image: url('slide3.jpg');"></div>
                 
-                <div class="absolute bottom-4 left-4 right-4 p-4 glass-panel rounded-xl flex justify-between items-end">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#022c22] via-transparent to-transparent opacity-80"></div>
+
+                <div class="absolute bottom-6 left-6 right-6 p-6 glass-panel rounded-2xl flex justify-between items-end border border-white/10">
                     <div>
-                        <p class="text-[10px] text-accent tracking-wider font-mono mb-1">DATA SOURCE</p>
-                        <p class="text-sm font-bold text-white">Sentra Padi Nasional</p>
+                        <p class="text-[10px] text-accent tracking-widest font-mono mb-2 uppercase">Data Source Live</p>
+                        <p class="text-lg font-bold text-white font-satoshi">Sentra Padi Nasional</p>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-accent text-[10px] flex items-center justify-center font-bold text-[#064e3b] border-2 border-[#065f46]">ID</div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                        <span class="text-xs font-mono text-white">REC ●</span>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <div id="analisis" class="container mx-auto px-6 md:px-12 py-12 max-w-7xl relative z-20 scroll-mt-20">
-        <div class="grid md:grid-cols-12 gap-8 items-start">
-            <div class="md:col-span-4 reveal">
-                <h2 class="text-2xl font-bold text-white mb-3">Analisis Strategis</h2>
-                <div class="h-1 w-12 bg-accent rounded-full mb-4"></div>
-                <p class="text-emerald-100 text-sm leading-relaxed text-justify">
-                    Fase paling mematikan bagi kualitas gabah adalah <span class="text-accent font-semibold">48 jam setelah panen</span>. Keterlambatan pengeringan di titik ini memicu lonjakan kerusakan hingga 15%.
+    <!-- ANALISIS SECTION (Spotlight Cards) -->
+    <div id="analisis" class="container mx-auto px-6 md:px-12 py-20 max-w-7xl relative z-20">
+        <div class="grid md:grid-cols-12 gap-12 items-start">
+            <div class="md:col-span-4 reveal sticky top-32">
+                <h2 class="text-3xl font-bold text-white mb-4 font-satoshi">Analisis Strategis</h2>
+                <div class="h-1 w-16 bg-accent rounded-full mb-6"></div>
+                <p class="text-emerald-100/90 text-sm leading-loose text-justify">
+                    Fase paling mematikan bagi kualitas gabah adalah <span class="text-accent font-bold bg-accent/10 px-1 rounded">48 jam setelah panen</span>. Keterlambatan pengeringan di titik ini memicu lonjakan kerusakan hingga 15%, menghancurkan nilai jual di pasar.
                 </p>
             </div>
-            <div class="md:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="glass-panel p-5 rounded-2xl hover:bg-white/5 transition-all cursor-default reveal border border-emerald-300/10 hover:border-accent/30">
-                    <h3 class="text-sm font-bold text-accent mb-2">1. Definisi</h3>
-                    <p class="text-[11px] text-emerald-200 leading-relaxed">Kehilangan kuantitas & kualitas gabah dari sawah ke penggilingan secara fisik dan ekonomi.</p>
+            <div class="md:col-span-8 grid grid-cols-1 gap-6" id="cards-container">
+                <!-- Card 1 -->
+                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-white/5 relative overflow-hidden hover-trigger">
+                    <div class="spotlight-overlay"></div>
+                    <div class="relative z-10 flex gap-6 items-start">
+                        <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
+                            <span class="font-bold text-xl">01</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2 font-satoshi">Definisi Kerugian</h3>
+                            <p class="text-sm text-emerald-200/80 leading-relaxed">Kehilangan kuantitas (bobot) & kualitas (mutu) gabah dari sawah ke penggilingan. Bukan hanya soal beras yang hilang, tapi nilai ekonomi yang menguap.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="glass-panel p-5 rounded-2xl hover:bg-white/5 transition-all cursor-default reveal border border-emerald-300/10 hover:border-accent/30" style="transition-delay: 100ms;">
-                    <h3 class="text-sm font-bold text-accent mb-2">2. Fase Kritis</h3>
-                    <p class="text-[11px] text-emerald-200 leading-relaxed">Harvesting (Panen) & Drying (Pengeringan) adalah titik lemah utama dalam rantai pasok.</p>
+                <!-- Card 2 -->
+                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-white/5 relative overflow-hidden hover-trigger">
+                    <div class="spotlight-overlay"></div>
+                    <div class="relative z-10 flex gap-6 items-start">
+                        <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
+                            <span class="font-bold text-xl">02</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2 font-satoshi">Fase Kritis</h3>
+                            <p class="text-sm text-emerald-200/80 leading-relaxed">Harvesting (Panen) & Drying (Pengeringan) adalah "leher botol" utama. Kesalahan di sini bersifat permanen dan tidak bisa diperbaiki di penggilingan.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="glass-panel p-5 rounded-2xl hover:bg-white/5 transition-all cursor-default reveal border border-emerald-300/10 hover:border-accent/30" style="transition-delay: 200ms;">
-                    <h3 class="text-sm font-bold text-accent mb-2">3. Dampak</h3>
-                    <p class="text-[11px] text-emerald-200 leading-relaxed">Penurunan stok beras nasional dan pengurangan margin keuntungan petani.</p>
+                <!-- Card 3 -->
+                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-white/5 relative overflow-hidden hover-trigger">
+                    <div class="spotlight-overlay"></div>
+                    <div class="relative z-10 flex gap-6 items-start">
+                        <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
+                            <span class="font-bold text-xl">03</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2 font-satoshi">Dampak Makro</h3>
+                            <p class="text-sm text-emerald-200/80 leading-relaxed">Secara nasional, ini mengancam stok beras. Bagi petani individu, ini berarti pemotongan margin keuntungan hingga 20-30% per musim.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="detail-fase" class="container mx-auto px-6 md:px-12 py-12 max-w-7xl relative z-20 scroll-mt-24">
-        <div class="glass-panel rounded-3xl p-8 md:p-10 border border-emerald-300/10 relative overflow-hidden reveal">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -z-10"></div>
-            <div class="text-center mb-10">
-                <span class="text-accent text-xs font-bold tracking-widest uppercase mb-2 block">Deep Dive Analysis</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-white">Rincian 3 Fase Kritis</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8 text-left">
-                <div class="group">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold group-hover:bg-accent group-hover:text-[#064e3b] transition-colors">01</div>
-                        <h3 class="text-lg font-bold text-white">Harvesting (Panen)</h3>
-                    </div>
-                    <p class="text-sm text-emerald-200 leading-relaxed">
-                        Proses pemotongan padi. Kerugian sering terjadi akibat "shattering" (gabah rontok di sawah) karena dipanen terlalu tua, atau penggunaan alat potong yang tidak efisien.
-                    </p>
-                </div>
-                <div class="group">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold group-hover:bg-accent group-hover:text-[#064e3b] transition-colors">02</div>
-                        <h3 class="text-lg font-bold text-white">Drying (Pengeringan)</h3>
-                    </div>
-                    <p class="text-sm text-emerald-200 leading-relaxed">
-                        Fase penentu kualitas giling. Penundaan pengeringan menyebabkan gabah kuning/busuk. Pengeringan terlalu cepat menyebabkan "fissures" (retak).
-                    </p>
-                </div>
-                <div class="group">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold group-hover:bg-accent group-hover:text-[#064e3b] transition-colors">03</div>
-                        <h3 class="text-lg font-bold text-white">Milling (Penggilingan)</h3>
-                    </div>
-                    <p class="text-sm text-emerald-200 leading-relaxed">
-                        Konversi gabah ke beras. Mesin giling yang "aus" atau setelan yang salah akan menghasilkan banyak *Head Rice* yang hancur menjadi *Broken Rice*.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <main id="dashboard" class="reveal w-full container mx-auto px-6 md:px-12 pb-16 pt-4 scroll-mt-24">
+    <!-- DASHBOARD SECTION -->
+    <main id="dashboard" class="reveal w-full container mx-auto px-6 md:px-12 py-20">
         <div class="relative group">
-            <div class="absolute -inset-1 bg-gradient-to-r from-accent to-emerald-700 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-            <div class="relative glass-panel rounded-[1.8rem] p-1 border border-emerald-300/10 bg-[#064e3b]/90">
-                <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-                        <h2 class="text-sm font-bold text-white tracking-wide">LIVE MONITOR</h2>
+            <div class="absolute -inset-1 bg-gradient-to-r from-accent via-emerald-500 to-accent rounded-[2.5rem] blur opacity-20 group-hover:opacity-50 transition duration-1000 animate-pulse"></div>
+            <div class="relative glass-panel rounded-[2.2rem] p-2 border border-emerald-300/10 bg-[#064e3b]/90">
+                <div class="flex items-center justify-between px-8 py-5 border-b border-white/5">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+                        <h2 class="text-sm font-bold text-white tracking-widest font-mono">LIVE MONITORING SYSTEM</h2>
                     </div>
-                    <div class="px-3 py-1 bg-white/5 rounded text-[10px] font-mono text-emerald-200">STATUS: ACTIVE</div>
+                    <div class="hidden md:flex gap-4 text-[10px] font-mono text-emerald-400/70">
+                        <span>LATENCY: 24ms</span>
+                        <span>SERVER: JKT-01</span>
+                    </div>
                 </div>
-                <div class="dashboard-container w-full h-[75vh] min-h-[500px] rounded-b-[1.5rem] overflow-hidden bg-white">
+                <div class="dashboard-container w-full h-[85vh] min-h-[600px] rounded-b-[2rem] overflow-hidden bg-white">
                     <iframe 
                         title="Rice Post-Harvest Loss Dashboard" 
                         src="https://app.powerbi.com/reportEmbed?reportId=761c2b43-3805-43e9-b48b-62f1ca96a6d1&autoAuth=true&ctid=fedd5298-8e66-45f1-b321-fd38ad0ff722" 
@@ -172,12 +179,53 @@
         </div>
     </main>
 
-    <footer class="py-8 text-center border-t border-white/5 bg-[#022c22]">
-        <div class="flex items-center justify-center gap-2 mb-2">
-            <span class="text-accent text-lg">●</span>
-            <p class="text-[10px] tracking-[0.2em] text-emerald-400 uppercase font-bold">Agritech Intelligence Unit</p>
+    <!-- SECTION PROFIL KELOMPOK (Enhanced) -->
+    <section id="profil" class="container mx-auto px-6 md:px-12 py-24 relative z-20">
+        <div class="text-center mb-16 reveal">
+            <span class="text-accent text-xs font-bold tracking-[0.4em] uppercase mb-4 block">The Minds Behind</span>
+            <h2 class="text-4xl md:text-5xl font-black text-white font-satoshi">Kelompok 8 - Kelas K2</h2>
         </div>
-        <p class="text-[10px] text-emerald-600">© 2024. Powered by Precision Agriculture Data.</p>
+
+        <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+            <!-- Anggota 1 -->
+            <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-accent/50 hover:to-accent/5 transition-all duration-500 hover-trigger">
+                <div class="bg-[#022c22] rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
+                        <img src="wihaga.png" alt="Wihaga" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="relative z-10 text-left">
+                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Wihaga Satwika Ghrena</h3>
+                        <p class="text-emerald-400 text-xs font-mono tracking-wider mb-2">LEAD RESEARCHER</p>
+                        <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-400 font-mono">F3401241075</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anggota 2 -->
+            <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-accent/50 hover:to-accent/5 transition-all duration-500 hover-trigger">
+                <div class="bg-[#022c22] rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:-rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
+                        <img src="omar.png" alt="Omar" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="relative z-10 text-left">
+                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Aditya Omar Ardany</h3>
+                        <p class="text-emerald-400 text-xs font-mono tracking-wider mb-2">DATA ANALYST</p>
+                        <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-400 font-mono">F3401241087</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 text-center border-t border-white/5 bg-[#011c15]">
+        <div class="flex items-center justify-center gap-3 mb-4">
+            <span class="w-2 h-2 rounded-full bg-accent"></span>
+            <p class="text-xs tracking-[0.3em] text-emerald-400 uppercase font-bold">Agritech Intelligence Unit</p>
+            <span class="w-2 h-2 rounded-full bg-accent"></span>
+        </div>
+        <p class="text-[10px] text-emerald-700/60 font-mono">EST. 2024 • PRECISION AGRICULTURE DATA</p>
     </footer>
 
     <script src="script.js"></script>
