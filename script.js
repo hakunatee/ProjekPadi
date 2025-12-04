@@ -1,229 +1,213 @@
 /**
- * ULTRA-MODERN AGRITECH INTERACTIVITY SCRIPT
- * Features: Smart Navbar, LERP Parallax, 3D Tilt, Magnetic Hover, Staggered Reveal
+ * ULTIMATE AGRITECH INTERACTIVITY
+ * Author: Lead Dev AI
  */
 
-// --- 1. PRELOADER & ENTRANCE SEQUENCE ---
-window.addEventListener('load', () => {
-    const preloader = document.getElementById('preloader');
-    
-    // Minimum load time simulation for smoother UX
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-        document.body.classList.remove('loading-state');
-        
-        // Trigger Hero Animations Sequentially (Staggered)
-        initHeroSequence();
-    }, 800);
+// --- 1. CUSTOM CURSOR SYSTEM ---
+const cursorDot = document.getElementById('cursor-dot');
+const cursorOutline = document.getElementById('cursor-outline');
+const hoverTriggers = document.querySelectorAll('.hover-trigger');
+
+window.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    // Dot follows instantly
+    cursorDot.style.left = `${posX}px`;
+    cursorDot.style.top = `${posY}px`;
+
+    // Outline follows with lag (animation)
+    cursorOutline.animate({
+        left: `${posX}px`,
+        top: `${posY}px`
+    }, { duration: 500, fill: "forwards" });
 });
 
-function initHeroSequence() {
-    // Select hero elements specifically
-    const heroElements = document.querySelectorAll('#home .reveal');
-    
-    heroElements.forEach((el, index) => {
-        // Add cascading delay based on index
-        setTimeout(() => {
-            el.classList.add('active');
-        }, index * 200 + 300); // Base delay 300ms + 200ms per item
+// Magnetic & Hover Effects
+hoverTriggers.forEach(trigger => {
+    trigger.addEventListener('mouseenter', () => {
+        document.body.classList.add('hovering');
     });
+    trigger.addEventListener('mouseleave', () => {
+        document.body.classList.remove('hovering');
+    });
+});
+
+
+// --- 2. CINEMATIC PRELOADER ---
+let progress = 0;
+const progressText = document.getElementById('progress-text');
+const progressBar = document.getElementById('progress-bar');
+const preloader = document.getElementById('preloader');
+
+const interval = setInterval(() => {
+    progress += Math.floor(Math.random() * 5) + 1;
+    if (progress > 100) progress = 100;
+
+    progressText.innerText = `${progress}%`;
+    progressBar.style.width = `${progress}%`;
+
+    if (progress === 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+            document.body.classList.remove('loading-state');
+            initHeroSequence(); // Start animations after load
+        }, 500);
+    }
+}, 30);
+
+
+// --- 3. PARTICLE SYSTEM (CANVAS FIREFLIES) ---
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray = [];
+const numberOfParticles = 50;
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.opacity = Math.random() * 0.5;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.2) this.size -= 0.005; // Twinkle effect
+        if (this.size <= 0.2) this.size = Math.random() * 2 + 0.5;
+
+        // Wrap around screen
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+    }
+    draw() {
+        ctx.fillStyle = `rgba(163, 230, 53, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
 }
 
-// --- 2. ADVANCED SLIDER LOGIC ---
+function initParticles() {
+    for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+    }
+}
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+    }
+    requestAnimationFrame(animateParticles);
+}
+initParticles();
+animateParticles();
+
+// Resize Canvas
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+
+// --- 4. SPOTLIGHT CARD EFFECT (MOUSE TRACKING GLOW) ---
+const cards = document.querySelectorAll('.spotlight-card');
+document.getElementById('cards-container').onmousemove = e => {
+    for(const card of document.querySelectorAll('.spotlight-card')) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+    }
+};
+// Apply to profile cards too
+document.getElementById('profil').onmousemove = e => {
+    for(const card of document.querySelectorAll('#profil .spotlight-card')) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+    }
+};
+
+
+// --- 5. TEXT SCRAMBLE & HERO SEQUENCE ---
+function initHeroSequence() {
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add('active');
+        }, index * 200 + 500);
+    });
+
+    // Scramble effect for title
+    const glitchText = document.querySelector('.glitch-effect');
+    if(glitchText) scrambleText(glitchText);
+}
+
+function scrambleText(element) {
+    const originalText = element.getAttribute('data-text');
+    const chars = '!<>-_\\/[]{}—=+*^?#________';
+    let iteration = 0;
+    
+    const interval = setInterval(() => {
+        element.innerText = originalText
+            .split("")
+            .map((letter, index) => {
+                if(index < iteration) return originalText[index];
+                return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join("");
+        
+        if(iteration >= originalText.length) clearInterval(interval);
+        iteration += 1 / 3;
+    }, 30);
+}
+
+// --- 6. STANDARD SLIDER & SCROLL LOGIC ---
+// (Tetap sama seperti sebelumnya karena sudah solid)
 const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
-const slideInterval = 4000; // Sedikit lebih lambat agar lebih elegan
-
-function nextSlide() {
-    if (slides.length === 0) return;
-    
+setInterval(() => {
+    if(slides.length === 0) return;
     slides[currentSlide].classList.remove('active');
     currentSlide = (currentSlide + 1) % slides.length;
     slides[currentSlide].classList.add('active');
-}
-// Start slider
-const sliderTimer = setInterval(nextSlide, slideInterval);
+}, 4000);
 
-
-// --- 3. SCROLL REVEAL (INTERSECTION OBSERVER) ---
-const observerOptions = {
-    threshold: 0.1, // Trigger lebih awal
-    rootMargin: "0px 0px -50px 0px" // Offset sedikit dari bawah
-};
-
-const revealObserver = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            
-            // Jika elemen adalah container grid, kita bisa men-stagger anak-anaknya (opsional)
-            // observer.unobserve(entry.target); // Optional: Run once
-        }
+        if (entry.isIntersecting) entry.target.classList.add('active');
     });
-}, observerOptions);
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-
-// --- 4. SMOOTH MOUSE PARALLAX (LERP SYSTEM) ---
-// Linear Interpolation untuk gerakan mouse yang buttery smooth
-function lerp(start, end, factor) {
-    return start + (end - start) * factor;
-}
-
-// State variables
-let mouseX = 0;
-let mouseY = 0;
-let currentX = 0;
-let currentY = 0;
-
-// Track mouse
-window.addEventListener('mousemove', (e) => {
-    // Normalize coordinates (-1 to 1) from center
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-});
-
-// Animation Loop
-function animateParallax() {
-    // Smoothly interpolate current position to target mouse position
-    currentX = lerp(currentX, mouseX, 0.05); // 0.05 is the "smoothness" factor
-    currentY = lerp(currentY, mouseY, 0.05);
-    
-    const orbs = document.querySelectorAll('.parallax-orb');
-    
-    orbs.forEach(orb => {
-        const speed = parseFloat(orb.getAttribute('data-speed') || 1);
-        const xMove = currentX * 50 * speed; // Max movement range
-        const yMove = currentY * 50 * speed;
-        
-        orb.style.transform = `translate3d(${xMove}px, ${yMove}px, 0)`;
-    });
-    
-    requestAnimationFrame(animateParallax);
-}
-animateParallax();
-
-
-// --- 5. REFINED 3D TILT EFFECT ---
+// 7. 3D Tilt for Hero Image
 const heroTilt = document.getElementById('hero-tilt');
 const heroContainer = document.querySelector('.perspective-container');
-
 if (heroContainer && heroTilt) {
     heroContainer.addEventListener('mousemove', (e) => {
         const rect = heroContainer.getBoundingClientRect();
-        const x = e.clientX - rect.left; // Mouse X relative to element
-        const y = e.clientY - rect.top;  // Mouse Y relative to element
-        
-        // Calculate rotation (max 8 degrees for subtlety)
-        // Center of element is 0 rotation
-        const xRotation = -((y - rect.height / 2) / rect.height * 16); 
-        const yRotation = ((x - rect.width / 2) / rect.width * 16);
-        
-        // Apply transform directly for responsiveness
-        heroTilt.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1.02, 1.02, 1.02)`;
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xRot = -((y - rect.height/2) / rect.height * 10);
+        const yRot = ((x - rect.width/2) / rect.width * 10);
+        heroTilt.style.transform = `rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
     });
-
     heroContainer.addEventListener('mouseleave', () => {
-        // Smooth reset
-        heroTilt.style.transition = 'transform 0.5s ease-out';
-        heroTilt.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        
-        // Remove transition after animation finishes so mousemove is fast again
-        setTimeout(() => {
-            heroTilt.style.transition = '';
-        }, 500);
-    });
-    
-    // Add transition on enter for smooth initial movement
-    heroContainer.addEventListener('mouseenter', () => {
-        heroTilt.style.transition = 'transform 0.1s ease-out';
+        heroTilt.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
     });
 }
-
-
-// --- 6. SMART NAVBAR & ACTIVE LINK HIGHLIGHT ---
-const navbar = document.querySelector('.navbar');
-let lastScrollY = window.scrollY;
-
-window.addEventListener('scroll', () => {
-    const currentScrollY = window.scrollY;
-    
-    // Smart Hide/Show Logic
-    // Sembunyikan saat scroll ke bawah (biar fokus konten), munculkan saat scroll ke atas
-    if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        navbar.style.transform = 'translateY(-100%)';
-    } else {
-        navbar.style.transform = 'translateY(0)';
-    }
-    
-    // Style change on scroll (Glass effect intensity)
-    // Updated colors to match Fresh Emerald Theme
-    if (currentScrollY > 20) {
-        navbar.style.paddingTop = '10px';
-        navbar.style.paddingBottom = '10px';
-        navbar.style.background = 'rgba(6, 78, 59, 0.95)'; // Emerald 900
-        navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.2)';
-    } else {
-        navbar.style.paddingTop = '15px';
-        navbar.style.paddingBottom = '15px';
-        navbar.style.background = 'rgba(6, 95, 70, 0.85)'; // Emerald 800
-        navbar.style.boxShadow = 'none';
-    }
-    
-    lastScrollY = currentScrollY;
-    
-    // Update Active Link
-    highlightActiveSection();
-});
-
-function highlightActiveSection() {
-    const sections = ['home', 'analisis', 'detail-fase', 'dashboard'];
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    let current = '';
-    
-    sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-            const sectionTop = section.offsetTop;
-            // Jika scroll melewati 30% dari bagian atas section
-            if (window.scrollY >= (sectionTop - window.innerHeight / 3)) {
-                current = sectionId;
-            }
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('text-[#a3e635]'); // Updated Lime Color
-        if (link.getAttribute('href').includes(current)) {
-            link.classList.add('text-[#a3e635]');
-        }
-    });
-}
-
-
-// --- 7. MAGNETIC BUTTON EFFECT ---
-// Efek tombol yang "tertarik" ke kursor mouse
-const magneticElements = document.querySelectorAll('.btn-dashboard, .nav-link');
-
-magneticElements.forEach(elem => {
-    elem.addEventListener('mousemove', (e) => {
-        const rect = elem.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        
-        // Move element slightly towards mouse (magnetic pull)
-        elem.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-    });
-    
-    elem.addEventListener('mouseleave', () => {
-        // Snap back
-        elem.style.transform = 'translate(0px, 0px)';
-        elem.style.transition = 'transform 0.3s cubic-bezier(0.2, 0, 0, 1)';
-        
-        setTimeout(() => {
-            elem.style.transition = '';
-        }, 300);
-    });
-});
