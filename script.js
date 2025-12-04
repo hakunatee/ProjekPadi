@@ -32,18 +32,27 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. FIXED PARALLAX ORBS (LAYER & MOVEMENT FIX) ---
-// FIX 1: Paksa Z-Index agar Orb muncul di DEPAN background hijau tapi di BELAKANG konten
+// --- 2. FIXED PARALLAX ORBS (AUTO-FLOAT & MOUSE INTERACTION) ---
 const parallaxContainer = document.getElementById('parallax-bg');
+const orbs = document.querySelectorAll('.parallax-orb');
+
+// FIX 1: Paksa Z-Index & Visibility agar pasti muncul
 if (parallaxContainer) {
-    parallaxContainer.style.zIndex = '-1'; // Naikkan layer di atas dynamic-bg (-2)
+    parallaxContainer.style.zIndex = '-1'; 
+    parallaxContainer.style.display = 'block';
 }
 
-// FIX 2: Movement Logic yang lebih responsif
+// Hapus transisi CSS yang mungkin bikin macet
+orbs.forEach(orb => {
+    orb.style.transition = 'none'; 
+});
+
+// Setup Variabel Gerak
 let mouseX = 0;
 let mouseY = 0;
 let targetX = 0;
 let targetY = 0;
+let time = 0; // Waktu untuk animasi otomatis
 
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
@@ -53,26 +62,33 @@ document.addEventListener('mousemove', (e) => {
     mouseY = (e.clientY - windowHalfY);
 });
 
-// Update center point on resize
 window.addEventListener('resize', () => {
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
 });
 
-const orbs = document.querySelectorAll('.parallax-orb');
-
 function animateOrbs() {
-    // LERP dengan faktor 0.08 agar movement terasa "berat" dan organik
-    targetX += (mouseX - targetX) * 0.08;
-    targetY += (mouseY - targetY) * 0.08;
+    // 1. Gerakan Mouse (LERP)
+    targetX += (mouseX - targetX) * 0.05;
+    targetY += (mouseY - targetY) * 0.05;
 
-    orbs.forEach(orb => {
+    // 2. Gerakan Otomatis (Floating/Bernapas)
+    time += 0.02; // Kecepatan float
+
+    orbs.forEach((orb, index) => {
         const speed = parseFloat(orb.getAttribute('data-speed') || 1);
-        // Perbesar faktor pengali (30 -> 50) agar gerakan lebih terlihat
-        const x = (targetX * speed) / 20; 
-        const y = (targetY * speed) / 20;
         
-        orb.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        // Posisi Mouse
+        const xMouse = (targetX * speed) / 15; 
+        const yMouse = (targetY * speed) / 15;
+        
+        // Posisi Float Otomatis (Sinusoidal Wave)
+        // Gunakan index agar setiap bola punya pola gerakan beda
+        const xFloat = Math.sin(time + index) * 20 * speed;
+        const yFloat = Math.cos(time * 0.8 + index) * 15 * speed;
+        
+        // Gabungkan keduanya
+        orb.style.transform = `translate3d(${xMouse + xFloat}px, ${yMouse + yFloat}px, 0)`;
     });
 
     requestAnimationFrame(animateOrbs);
