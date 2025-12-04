@@ -1,5 +1,5 @@
 /**
- * ULTIMATE AGRITECH INTERACTIVITY (FINAL REFINED v3)
+ * ULTIMATE AGRITECH INTERACTIVITY (FINAL FIX)
  */
 
 // --- 1. PRELOADER ---
@@ -32,13 +32,12 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. CANVAS PARTICLES (HIGH DPI & CRISP) ---
+// --- 2. CANVAS PARTICLES ---
 const canvas = document.getElementById('particle-canvas');
 
 if (canvas) {
     const ctx = canvas.getContext('2d');
     
-    // Fungsi untuk mengatur ukuran canvas sesuai DPI layar
     function resizeCanvas() {
         const dpr = window.devicePixelRatio || 1;
         canvas.width = window.innerWidth * dpr;
@@ -48,134 +47,77 @@ if (canvas) {
         canvas.style.height = `${window.innerHeight}px`;
     }
     
-    // Panggil saat inisialisasi
     resizeCanvas();
 
     let particles = [];
     const particleCount = window.innerWidth < 768 ? 40 : 80; 
 
     class Particle {
-        constructor() {
-            this.reset();
-        }
-
+        constructor() { this.reset(); }
         reset() {
             this.x = Math.random() * window.innerWidth;
             this.y = Math.random() * window.innerHeight;
-            // Kecepatan konstan & lambat (Floating)
             this.vx = (Math.random() - 0.5) * 0.8; 
             this.vy = (Math.random() - 0.5) * 0.8;
-            // Ukuran KECIL & CRISP (1px - 2.5px)
             this.size = Math.random() * 1.5 + 1; 
             this.baseOpacity = Math.random() * 0.5 + 0.2;
             this.opacity = this.baseOpacity;
             this.fadeSpeed = 0.005 + Math.random() * 0.005;
         }
-
         update() {
-            this.x += this.vx;
-            this.y += this.vy;
-
-            // Bounce logic
+            this.x += this.vx; this.y += this.vy;
             if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
             if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
-            
-            // Twinkle Logic
             this.opacity += this.fadeSpeed;
-            if (this.opacity > this.baseOpacity + 0.3 || this.opacity < 0.1) {
-                this.fadeSpeed *= -1;
-            }
+            if (this.opacity > this.baseOpacity + 0.3 || this.opacity < 0.1) this.fadeSpeed *= -1;
         }
-
         draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(163, 230, 53, ${this.opacity})`; // Lime Green
-            // Glow effect
-            ctx.shadowBlur = 4;
-            ctx.shadowColor = 'rgba(163, 230, 53, 0.5)';
-            ctx.fill();
-            ctx.shadowBlur = 0; // Reset for performance
+            ctx.fillStyle = `rgba(163, 230, 53, ${this.opacity})`;
+            ctx.shadowBlur = 4; ctx.shadowColor = 'rgba(163, 230, 53, 0.5)';
+            ctx.fill(); ctx.shadowBlur = 0;
         }
     }
 
     function initParticles() {
         particles = [];
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < particleCount; i++) { particles.push(new Particle()); }
     }
-
     function animateParticles() {
-        // Clear rect based on logical size
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
+        particles.forEach(p => { p.update(); p.draw(); });
         requestAnimationFrame(animateParticles);
     }
-
-    initParticles();
-    animateParticles();
-
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        initParticles();
-    });
+    initParticles(); animateParticles();
+    window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
 }
 
-// --- 3. SEED TRAIL EFFECT (INTERACTIVE) ---
+// --- 3. SEED TRAIL ---
 document.addEventListener('mousemove', (e) => {
-    // Throttle
     if (Math.random() > 0.2) return; 
-
     const seed = document.createElement('div');
     seed.classList.add('seed-particle');
-    
-    // Golden Grain
-    seed.style.position = 'fixed';
-    seed.style.width = '5px';
-    seed.style.height = '8px'; 
-    seed.style.backgroundColor = '#fbbf24'; // Emas
-    seed.style.borderRadius = '50%'; 
-    seed.style.pointerEvents = 'none';
-    seed.style.zIndex = '9998';
-    seed.style.left = `${e.clientX}px`;
-    seed.style.top = `${e.clientY}px`;
-    
-    const rotation = Math.random() * 360;
-    const fallDistance = 60 + Math.random() * 40;
-    const drift = (Math.random() - 0.5) * 60;
-    
-    seed.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1s';
-    seed.style.opacity = '1';
-    seed.style.transform = `rotate(${rotation}deg) scale(1)`;
-
+    seed.style.left = `${e.clientX}px`; seed.style.top = `${e.clientY}px`;
+    seed.style.transform = `rotate(${Math.random() * 360}deg)`;
     document.body.appendChild(seed);
-
     requestAnimationFrame(() => {
         seed.style.opacity = '0';
-        seed.style.transform = `translate(${drift}px, ${fallDistance}px) rotate(${rotation + 180}deg) scale(0.5)`;
+        seed.style.transform = `translate(${(Math.random() - 0.5) * 60}px, ${60 + Math.random() * 40}px) rotate(${Math.random() * 360}deg) scale(0.5)`;
     });
-    
     setTimeout(() => seed.remove(), 1000);
 });
 
-// --- 4. ANIMATED COUNTERS ---
+// --- 4. COUNTERS ---
 const counters = document.querySelectorAll('.counter');
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const counter = entry.target;
             const target = parseInt(counter.getAttribute('data-target'));
-            
             let count = 0;
-            const duration = 2000;
-            const intervalTime = 30;
-            const steps = duration / intervalTime;
+            const steps = 100;
             const increment = target / steps;
-
             const timer = setInterval(() => {
                 count += increment;
                 if (count >= target) {
@@ -184,16 +126,14 @@ const counterObserver = new IntersectionObserver((entries) => {
                 } else {
                     counter.innerText = Math.ceil(count);
                 }
-            }, intervalTime);
-            
+            }, 20);
             counterObserver.unobserve(counter);
         }
     });
 }, { threshold: 0.1 }); 
+counters.forEach(c => counterObserver.observe(c));
 
-counters.forEach(counter => counterObserver.observe(counter));
-
-// --- 5. AUDIO PLAYER TOGGLE ---
+// --- 5. AUDIO ---
 const audioBtn = document.getElementById('audio-toggle');
 const bgMusic = document.getElementById('bg-music');
 const iconPlay = document.getElementById('icon-play');
@@ -205,40 +145,63 @@ if (audioBtn && bgMusic) {
     audioBtn.addEventListener('click', () => {
         if (isPlaying) {
             bgMusic.pause();
-            iconPlay.classList.remove('hidden');
-            iconPause.classList.add('hidden');
+            iconPlay.classList.remove('hidden'); iconPause.classList.add('hidden');
             audioBtn.classList.remove('animate-pulse');
         } else {
-            bgMusic.play().catch(e => console.log("Audio autoplay blocked"));
-            iconPlay.classList.add('hidden');
-            iconPause.classList.remove('hidden');
+            bgMusic.play().catch(e => console.log("Audio block"));
+            iconPlay.classList.add('hidden'); iconPause.classList.remove('hidden');
             audioBtn.classList.add('animate-pulse');
         }
         isPlaying = !isPlaying;
     });
 }
 
-// --- 6. SCROLL PROGRESS BAR & SCROLL TO TOP ---
+// --- 6. SCROLL PROGRESS & SCROLL TO TOP (FIXED) ---
 const scrollBar = document.querySelector('.scroll-progress-bar');
 const scrollTopBtn = document.getElementById('scrollToTopBtn');
 
-window.addEventListener('scroll', () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+// Gunakan fungsi onscroll window global agar lebih reliable
+window.onscroll = function() {
+    // Ambil nilai scroll dari berbagai kemungkinan properti browser
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    
+    // Progress Bar Logic
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (scrollTop / scrollHeight) * 100;
-    
-    // Update Progress Bar
     if(scrollBar) scrollBar.style.width = `${scrolled}%`;
 
-    // Show/Hide Scroll to Top Button
-    if (scrollTop > 500) {
-        scrollTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
-        scrollTopBtn.classList.add('opacity-100', 'translate-y-0');
-    } else {
-        scrollTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
-        scrollTopBtn.classList.remove('opacity-100', 'translate-y-0');
+    // Scroll Top Button Logic
+    if (scrollTopBtn) {
+        if (scrollTop > 300) { // Muncul setelah scroll 300px
+            scrollTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
+            scrollTopBtn.classList.add('opacity-100', 'translate-y-0');
+        } else {
+            scrollTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
+            scrollTopBtn.classList.remove('opacity-100', 'translate-y-0');
+        }
     }
-});
+    
+    // Navbar Hide/Show Logic
+    if (typeof lastScrollY !== 'undefined') {
+        const navbar = document.querySelector('.navbar');
+        if (scrollTop > lastScrollY && scrollTop > 100) {
+            navbar.style.transform = 'translateY(-100%)';
+        } else {
+            navbar.style.transform = 'translateY(0)';
+        }
+        // Navbar Style
+        if (scrollTop > 20) {
+            navbar.style.background = 'rgba(6, 78, 59, 0.95)';
+            navbar.style.paddingTop = '10px'; navbar.style.paddingBottom = '10px';
+        } else {
+            navbar.style.background = 'rgba(6, 78, 59, 0.85)';
+            navbar.style.paddingTop = '15px'; navbar.style.paddingBottom = '15px';
+        }
+        lastScrollY = scrollTop;
+    } else {
+        window.lastScrollY = scrollTop;
+    }
+};
 
 if (scrollTopBtn) {
     scrollTopBtn.addEventListener('click', () => {
@@ -263,7 +226,7 @@ if(textContainer) {
     });
 }
 
-// --- 8. CURSOR & SPOTLIGHT ---
+// --- 8. CURSOR ---
 const cursorDot = document.getElementById('cursor-dot');
 const cursorOutline = document.getElementById('cursor-outline');
 const hoverTriggers = document.querySelectorAll('.hover-trigger');
@@ -280,6 +243,7 @@ hoverTriggers.forEach(t => {
     t.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
 });
 
+// Spotlight
 const cardsContainer = document.getElementById('cards-container');
 if (cardsContainer) {
     cardsContainer.onmousemove = e => {
@@ -291,6 +255,7 @@ if (cardsContainer) {
     };
 }
 
+// Text Scramble
 function scrambleText(element) {
     const originalText = element.getAttribute('data-text');
     const chars = '!<>-_\\/[]{}—=+*^?#________';
@@ -305,6 +270,7 @@ function scrambleText(element) {
     }, 30);
 }
 
+// Standard Slider
 const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
 setInterval(() => {
@@ -314,6 +280,7 @@ setInterval(() => {
     slides[currentSlide].classList.add('active');
 }, 4000);
 
+// Reveal
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
@@ -321,6 +288,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+// Hero Tilt
 const heroTilt = document.getElementById('hero-tilt');
 const heroContainer = document.querySelector('.perspective-container');
 if (heroContainer && heroTilt) {
