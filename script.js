@@ -32,51 +32,57 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. DYNAMIC BACKGROUND (CANVAS PARTICLES - FIREFLIES) ---
-// REVISI: Menggunakan Canvas untuk partikel kecil, jelas, dan bergerak otomatis
+// --- 2. CANVAS PARTICLES (HIGH DPI & CRISP) ---
 const canvas = document.getElementById('particle-canvas');
-const parallaxBg = document.getElementById('parallax-bg');
-
-// Sembunyikan orb besar yang "samar" agar tidak mengganggu
-if (parallaxBg) {
-    parallaxBg.style.display = 'none'; 
-}
 
 if (canvas) {
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    
+    // Fungsi untuk mengatur ukuran canvas sesuai DPI layar
+    function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+    }
+    
+    // Panggil saat inisialisasi
+    resizeCanvas();
 
     let particles = [];
-    // Jumlah partikel disesuaikan agar tidak terlalu ramai tapi terlihat jelas
-    const particleCount = window.innerWidth < 768 ? 30 : 60; 
+    const particleCount = window.innerWidth < 768 ? 40 : 80; 
 
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            // Kecepatan gerak otomatis (Tanpa Mouse)
-            this.vx = (Math.random() - 0.5) * 1.5; 
-            this.vy = (Math.random() - 0.5) * 1.5;
-            // Ukuran kecil-kecil sesuai request (1px - 3px)
-            this.size = Math.random() * 2 + 1; 
-            this.baseOpacity = Math.random() * 0.5 + 0.3; // Lebih jelas (min 0.3)
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * window.innerWidth;
+            this.y = Math.random() * window.innerHeight;
+            // Kecepatan konstan & lambat (Floating)
+            this.vx = (Math.random() - 0.5) * 0.8; 
+            this.vy = (Math.random() - 0.5) * 0.8;
+            // Ukuran KECIL & CRISP (1px - 2.5px)
+            this.size = Math.random() * 1.5 + 1; 
+            this.baseOpacity = Math.random() * 0.5 + 0.2;
             this.opacity = this.baseOpacity;
-            this.fadeSpeed = 0.01;
+            this.fadeSpeed = 0.005 + Math.random() * 0.005;
         }
 
         update() {
-            // Gerak terus menerus
             this.x += this.vx;
             this.y += this.vy;
 
-            // Pantulan di tepi layar (Bounce)
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            // Bounce logic
+            if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+            if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
             
-            // Efek Kedip (Twinkle)
+            // Twinkle Logic
             this.opacity += this.fadeSpeed;
-            if (this.opacity > this.baseOpacity + 0.2 || this.opacity < this.baseOpacity - 0.2) {
+            if (this.opacity > this.baseOpacity + 0.3 || this.opacity < 0.1) {
                 this.fadeSpeed *= -1;
             }
         }
@@ -84,14 +90,12 @@ if (canvas) {
         draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            // Warna Lime Green yang menyala
-            ctx.fillStyle = `rgba(163, 230, 53, ${this.opacity})`;
-            // Efek Glow
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = '#a3e635';
+            ctx.fillStyle = `rgba(163, 230, 53, ${this.opacity})`; // Lime Green
+            // Glow effect
+            ctx.shadowBlur = 4;
+            ctx.shadowColor = 'rgba(163, 230, 53, 0.5)';
             ctx.fill();
-            // Reset shadow untuk performa
-            ctx.shadowBlur = 0; 
+            ctx.shadowBlur = 0; // Reset for performance
         }
     }
 
@@ -103,7 +107,8 @@ if (canvas) {
     }
 
     function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Clear rect based on logical size
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         particles.forEach(p => {
             p.update();
             p.draw();
@@ -114,23 +119,21 @@ if (canvas) {
     initParticles();
     animateParticles();
 
-    // Handle Resize
     window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        resizeCanvas();
         initParticles();
     });
 }
 
 // --- 3. SEED TRAIL EFFECT (INTERACTIVE) ---
 document.addEventListener('mousemove', (e) => {
-    // Throttle agar performa tetap ringan
+    // Throttle
     if (Math.random() > 0.2) return; 
 
     const seed = document.createElement('div');
     seed.classList.add('seed-particle');
     
-    // Styling Golden Grain
+    // Golden Grain
     seed.style.position = 'fixed';
     seed.style.width = '5px';
     seed.style.height = '8px'; 
