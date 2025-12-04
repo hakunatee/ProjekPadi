@@ -1,6 +1,5 @@
 /**
- * ULTIMATE AGRITECH INTERACTIVITY (FINAL UPGRADE)
- * Features: Counters, Seeds, Slider, Audio, Parallax Text
+ * ULTIMATE AGRITECH INTERACTIVITY (REFINED)
  */
 
 // --- 1. PRELOADER & INITIALIZATION ---
@@ -33,39 +32,27 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. SEED TRAIL EFFECT (JEJAK BENIH) ---
-// Membuat elemen kecil saat mouse bergerak
+// --- 2. SEED TRAIL EFFECT ---
 document.addEventListener('mousemove', (e) => {
-    // Throttle creation to avoid lag (create every 5th call)
     if (Math.random() > 0.15) return; 
-
     const seed = document.createElement('div');
     seed.classList.add('seed-particle');
     seed.style.left = `${e.clientX}px`;
     seed.style.top = `${e.clientY}px`;
-    
-    // Randomize rotation
     seed.style.transform = `rotate(${Math.random() * 360}deg)`;
-    
     document.body.appendChild(seed);
-
-    // Remove after animation (1s)
-    setTimeout(() => {
-        seed.remove();
-    }, 1000);
+    setTimeout(() => seed.remove(), 1000);
 });
 
 // --- 3. ANIMATED COUNTERS ---
-// Menghitung angka saat terlihat di layar
 const counters = document.querySelectorAll('.counter');
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const counter = entry.target;
             const target = +counter.getAttribute('data-target');
-            const duration = 2000; // 2 seconds
+            const duration = 2000;
             const increment = target / (duration / 30);
-            
             let current = 0;
             const updateCounter = () => {
                 current += increment;
@@ -77,52 +64,13 @@ const counterObserver = new IntersectionObserver((entries) => {
                 }
             };
             updateCounter();
-            counterObserver.unobserve(counter); // Run once
+            counterObserver.unobserve(counter);
         }
     });
 }, { threshold: 0.5 });
-
 counters.forEach(counter => counterObserver.observe(counter));
 
-// --- 4. BEFORE-AFTER SLIDER LOGIC ---
-const slider = document.getElementById('fase-visual');
-const resizeDiv = document.getElementById('ba-resize');
-const handle = document.getElementById('ba-handle');
-
-if (slider && resizeDiv && handle) {
-    let isDragging = false;
-
-    const moveSlider = (x) => {
-        const sliderRect = slider.getBoundingClientRect();
-        let newWidth = x - sliderRect.left;
-        
-        // Boundaries
-        if (newWidth < 0) newWidth = 0;
-        if (newWidth > sliderRect.width) newWidth = sliderRect.width;
-        
-        const widthPercent = (newWidth / sliderRect.width) * 100;
-        
-        resizeDiv.style.width = `${widthPercent}%`;
-        handle.style.left = `${widthPercent}%`;
-    };
-
-    slider.addEventListener('mousedown', () => isDragging = true);
-    window.addEventListener('mouseup', () => isDragging = false);
-    window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        moveSlider(e.clientX);
-    });
-    
-    // Touch support
-    slider.addEventListener('touchstart', () => isDragging = true);
-    window.addEventListener('touchend', () => isDragging = false);
-    window.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        moveSlider(e.touches[0].clientX);
-    });
-}
-
-// --- 5. AUDIO PLAYER TOGGLE ---
+// --- 4. AUDIO PLAYER TOGGLE ---
 const audioBtn = document.getElementById('audio-toggle');
 const bgMusic = document.getElementById('bg-music');
 const iconPlay = document.getElementById('icon-play');
@@ -130,8 +78,7 @@ const iconPause = document.getElementById('icon-pause');
 let isPlaying = false;
 
 if (audioBtn && bgMusic) {
-    bgMusic.volume = 0.4; // Volume 40% agar tidak berisik
-    
+    bgMusic.volume = 0.4;
     audioBtn.addEventListener('click', () => {
         if (isPlaying) {
             bgMusic.pause();
@@ -139,7 +86,7 @@ if (audioBtn && bgMusic) {
             iconPause.classList.add('hidden');
             audioBtn.classList.remove('animate-pulse');
         } else {
-            bgMusic.play().catch(e => console.log("Audio autoplay blocked needs interaction"));
+            bgMusic.play().catch(e => console.log("Audio autoplay blocked"));
             iconPlay.classList.add('hidden');
             iconPause.classList.remove('hidden');
             audioBtn.classList.add('animate-pulse');
@@ -148,7 +95,7 @@ if (audioBtn && bgMusic) {
     });
 }
 
-// --- 6. SCROLL PROGRESS BAR ---
+// --- 5. SCROLL PROGRESS BAR ---
 const scrollBar = document.querySelector('.scroll-progress-bar');
 window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -157,27 +104,21 @@ window.addEventListener('scroll', () => {
     if(scrollBar) scrollBar.style.width = `${scrolled}%`;
 });
 
-// --- 7. PARALLAX TEXT EXPLOSION ---
+// --- 6. PARALLAX TEXT ---
 const textContainer = document.querySelector('.parallax-text-container');
 const layers = document.querySelectorAll('.layer');
-
 if(textContainer) {
     textContainer.addEventListener('mousemove', (e) => {
         const x = (window.innerWidth - e.pageX * 2) / 100;
         const y = (window.innerHeight - e.pageY * 2) / 100;
-        
         layers.forEach(layer => {
             const depth = layer.getAttribute('data-depth');
-            const moveX = x * depth * 50;
-            const moveY = y * depth * 50;
-            layer.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+            layer.style.transform = `translateX(${x * depth * 50}px) translateY(${y * depth * 50}px)`;
         });
     });
 }
 
-// --- EXISTING LOGIC (Cursor, Slider, Spotlight, etc) ---
-// (Tetap sama, disatukan di bawah ini untuk kelengkapan)
-
+// --- 7. CURSOR, SPOTLIGHT, ETC ---
 const cursorDot = document.getElementById('cursor-dot');
 const cursorOutline = document.getElementById('cursor-outline');
 const hoverTriggers = document.querySelectorAll('.hover-trigger');
@@ -194,7 +135,6 @@ hoverTriggers.forEach(t => {
     t.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
 });
 
-// Spotlight
 const cardsContainer = document.getElementById('cards-container');
 if (cardsContainer) {
     cardsContainer.onmousemove = e => {
@@ -206,7 +146,6 @@ if (cardsContainer) {
     };
 }
 
-// Scramble Text
 function scrambleText(element) {
     const originalText = element.getAttribute('data-text');
     const chars = '!<>-_\\/[]{}—=+*^?#________';
@@ -221,7 +160,6 @@ function scrambleText(element) {
     }, 30);
 }
 
-// Standard Slider
 const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
 setInterval(() => {
@@ -231,7 +169,6 @@ setInterval(() => {
     slides[currentSlide].classList.add('active');
 }, 4000);
 
-// Reveal Observer
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
@@ -239,7 +176,6 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// 3D Tilt Hero
 const heroTilt = document.getElementById('hero-tilt');
 const heroContainer = document.querySelector('.perspective-container');
 if (heroContainer && heroTilt) {
