@@ -218,14 +218,36 @@ if (audioBtn && bgMusic) {
     });
 }
 
-// --- 6. SCROLL PROGRESS BAR ---
+// --- 6. SCROLL PROGRESS BAR & SCROLL TO TOP ---
 const scrollBar = document.querySelector('.scroll-progress-bar');
+const scrollTopBtn = document.getElementById('scrollToTopBtn');
+
 window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (scrollTop / scrollHeight) * 100;
+    
+    // Update Progress Bar
     if(scrollBar) scrollBar.style.width = `${scrolled}%`;
+
+    // Show/Hide Scroll to Top Button
+    if (scrollTop > 500) {
+        scrollTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
+        scrollTopBtn.classList.add('opacity-100', 'translate-y-0');
+    } else {
+        scrollTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
+        scrollTopBtn.classList.remove('opacity-100', 'translate-y-0');
+    }
 });
+
+if (scrollTopBtn) {
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
 
 // --- 7. PARALLAX TEXT ---
 const textContainer = document.querySelector('.parallax-text-container');
