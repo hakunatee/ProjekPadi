@@ -16,6 +16,7 @@
     <div id="cursor-outline"></div>
 
     <!-- CINEMATIC PRELOADER -->
+    <!-- Z-Index 100 agar di paling atas -->
     <div id="preloader" class="fixed inset-0 z-[100] bg-[#022c22] flex flex-col items-center justify-center text-white">
         <div class="relative w-64 h-1 bg-white/10 rounded-full overflow-hidden mb-4">
             <div id="progress-bar" class="absolute top-0 left-0 h-full w-0 bg-accent transition-all duration-100 ease-out"></div>
@@ -26,7 +27,7 @@
         </div>
     </div>
     
-    <!-- CANVAS PARTICLES (Fireflies) -->
+    <!-- CANVAS PARTICLES -->
     <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10"></canvas>
     
     <div class="dynamic-bg"></div>
@@ -77,9 +78,10 @@
 
         <div class="w-full md:w-7/12 h-[400px] md:h-[500px] relative z-10 reveal perspective-container">
             <div id="hero-tilt" class="w-full h-full rounded-[2.5rem] overflow-hidden border border-emerald-300/20 shadow-2xl relative bg-[#064e3b] hover-trigger">
-                <div class="slide active" style="background-image: url('slide1.jpg');"></div>
-                <div class="slide" style="background-image: url('slide2.jpg');"></div>
-                <div class="slide" style="background-image: url('slide3.jpg');"></div>
+                <!-- Pastikan file slide1.jpg, slide2.jpg, slide3.jpg ada di folder -->
+                <div class="slide active" style="background-image: url('./slide1.jpg');"></div>
+                <div class="slide" style="background-image: url('./slide2.jpg');"></div>
+                <div class="slide" style="background-image: url('./slide3.jpg');"></div>
                 
                 <div class="absolute inset-0 bg-gradient-to-t from-[#022c22] via-transparent to-transparent opacity-80"></div>
 
@@ -97,10 +99,11 @@
         </div>
     </header>
 
-    <!-- ANALISIS SECTION (Spotlight Cards) -->
+    <!-- ANALISIS SECTION -->
     <div id="analisis" class="container mx-auto px-6 md:px-12 py-20 max-w-7xl relative z-20">
         <div class="grid md:grid-cols-12 gap-12 items-start">
-            <div class="md:col-span-4 reveal sticky top-32">
+            <!-- Menghapus class 'sticky top-32' agar tidak ikut scroll -->
+            <div class="md:col-span-4 reveal">
                 <h2 class="text-3xl font-bold text-white mb-4 font-satoshi">Analisis Strategis</h2>
                 <div class="h-1 w-16 bg-accent rounded-full mb-6"></div>
                 <p class="text-emerald-100/90 text-sm leading-loose text-justify">
@@ -179,7 +182,7 @@
         </div>
     </main>
 
-    <!-- SECTION PROFIL KELOMPOK (Enhanced) -->
+    <!-- SECTION PROFIL KELOMPOK -->
     <section id="profil" class="container mx-auto px-6 md:px-12 py-24 relative z-20">
         <div class="text-center mb-16 reveal">
             <span class="text-accent text-xs font-bold tracking-[0.4em] uppercase mb-4 block">The Minds Behind</span>
@@ -192,7 +195,8 @@
                 <div class="bg-[#022c22] rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
-                        <img src="wihaga.png" alt="Wihaga" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        <!-- Pastikan file wihaga.png ada di folder yang sama -->
+                        <img src="./wihaga.png" alt="Wihaga" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
                         <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Wihaga Satwika Ghrena</h3>
@@ -207,7 +211,8 @@
                 <div class="bg-[#022c22] rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:-rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
-                        <img src="omar.png" alt="Omar" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        <!-- Pastikan file omar.png ada di folder yang sama -->
+                        <img src="./omar.png" alt="Omar" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
                         <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Aditya Omar Ardany</h3>
@@ -225,7 +230,7 @@
             <p class="text-xs tracking-[0.3em] text-emerald-400 uppercase font-bold">Agritech Intelligence Unit</p>
             <span class="w-2 h-2 rounded-full bg-accent"></span>
         </div>
-        <p class="text-[10px] text-emerald-700/60 font-mono">EST. 2025 • PRECISION AGRICULTURE DATA</p>
+        <p class="text-[10px] text-emerald-700/60 font-mono">EST. 2024 • PRECISION AGRICULTURE DATA</p>
     </footer>
 
     <script src="script.js"></script>
