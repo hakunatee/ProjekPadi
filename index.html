@@ -15,12 +15,12 @@
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
 
-    <!-- CINEMATIC PRELOADER (Hijau Segar #064e3b) -->
-    <div id="preloader" class="fixed inset-0 z-[100] bg-[#064e3b] flex flex-col items-center justify-center text-white">
+    <!-- CINEMATIC PRELOADER (Fixed: Sekarang menggunakan Gradasi, bukan solid flat) -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-[radial-gradient(circle_at_center,_#064e3b_0%,_#022c22_100%)] flex flex-col items-center justify-center text-white">
         <div class="relative w-64 h-1 bg-white/10 rounded-full overflow-hidden mb-4">
-            <div id="progress-bar" class="absolute top-0 left-0 h-full w-0 bg-accent transition-all duration-100 ease-out"></div>
+            <div id="progress-bar" class="absolute top-0 left-0 h-full w-0 bg-[#a3e635] transition-all duration-100 ease-out"></div>
         </div>
-        <div class="flex justify-between w-64 text-xs font-mono text-accent">
+        <div class="flex justify-between w-64 text-xs font-mono text-[#a3e635]">
             <span>SYSTEM INITIALIZING</span>
             <span id="progress-text">0%</span>
         </div>
@@ -29,14 +29,16 @@
     <!-- CANVAS PARTICLES -->
     <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10"></canvas>
     
-    <div class="dynamic-bg"></div>
+    <!-- DYNAMIC BACKGROUND (Enforced Gradient via Tailwind) -->
+    <!-- Memastikan gradasi seimbang: Terang di tengah (#10b981), Emerald di tengah (#064e3b), Gelap di tepi (#022c22) -->
+    <div class="dynamic-bg fixed inset-0 -z-20 bg-[radial-gradient(circle_at_50%_0%,_#10b981_0%,_#064e3b_40%,_#022c22_90%)]"></div>
 
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-2 group cursor-pointer hover-trigger" onclick="window.scrollTo(0,0)">
-                <span class="w-2 h-2 bg-accent rounded-full group-hover:animate-ping"></span>
-                <span class="font-bold text-lg tracking-wider text-white font-satoshi">AGRI<span class="text-accent">TECH</span></span>
+                <span class="w-2 h-2 bg-[#a3e635] rounded-full group-hover:animate-ping"></span>
+                <span class="font-bold text-lg tracking-wider text-white font-satoshi">AGRI<span class="text-[#a3e635]">TECH</span></span>
             </div>
             <ul class="hidden md:flex space-x-8 text-xs font-medium uppercase tracking-widest">
                 <li><a href="#home" class="nav-link hover-trigger">Beranda</a></li>
@@ -50,14 +52,15 @@
     <!-- HERO SECTION -->
     <header id="home" class="pt-32 pb-10 px-6 md:px-12 container mx-auto flex flex-col md:flex-row items-center gap-12 min-h-[95vh]">
         <div class="w-full md:w-5/12 text-left z-10">
-            <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/10 mb-6 backdrop-blur-sm">
-                <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-                <p class="text-[10px] font-bold tracking-[0.2em] text-accent uppercase">AI Powered Agriculture</p>
+            <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#a3e635]/20 bg-[#a3e635]/10 mb-6 backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#a3e635] animate-pulse"></span>
+                <p class="text-[10px] font-bold tracking-[0.2em] text-[#a3e635] uppercase">AI Powered Agriculture</p>
             </div>
             
             <h1 class="reveal-text text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight font-satoshi">
-                Pantau <span class="text-accent relative inline-block glitch-effect" data-text="Rugi">Rugi</span><br>
-                Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-300">Padi.</span>
+                Pantau <span class="text-[#a3e635] relative inline-block glitch-effect" data-text="Rugi">Rugi</span><br>
+                <!-- Gradasi teks diperbaiki agar nyambung dengan Lime (#a3e635) -->
+                Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#a3e635]">Padi.</span>
             </h1>
             
             <p class="reveal text-sm md:text-base text-emerald-100 font-light leading-relaxed max-w-lg mb-10">
@@ -65,7 +68,7 @@
             </p>
             
             <div class="reveal flex gap-4">
-                <a href="#dashboard" class="group px-8 py-4 bg-accent text-[#064e3b] font-bold rounded-full text-xs hover:scale-105 transition-all shadow-[0_0_30px_rgba(163,230,53,0.4)] flex items-center gap-3 hover-trigger">
+                <a href="#dashboard" class="group px-8 py-4 bg-[#a3e635] text-[#064e3b] font-bold rounded-full text-xs hover:scale-105 transition-all shadow-[0_0_30px_rgba(163,230,53,0.4)] flex items-center gap-3 hover-trigger">
                     <span>Buka Dashboard</span>
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
@@ -82,11 +85,12 @@
                 <div class="slide" style="background-image: url('slide2.jpg');"></div>
                 <div class="slide" style="background-image: url('slide3.jpg');"></div>
                 
-                <div class="absolute inset-0 bg-gradient-to-t from-[#064e3b] via-transparent to-transparent opacity-80"></div>
+                <!-- Overlay gradient diperhalus -->
+                <div class="absolute inset-0 bg-gradient-to-t from-[#064e3b] via-transparent to-transparent opacity-90"></div>
 
                 <div class="absolute bottom-6 left-6 right-6 p-6 glass-panel rounded-2xl flex justify-between items-end border border-white/10">
                     <div>
-                        <p class="text-[10px] text-accent tracking-widest font-mono mb-2 uppercase">Data Source Live</p>
+                        <p class="text-[10px] text-[#a3e635] tracking-widest font-mono mb-2 uppercase">Data Source Live</p>
                         <p class="text-lg font-bold text-white font-satoshi">Sentra Padi Nasional</p>
                     </div>
                     <div class="flex items-center gap-3">
@@ -103,9 +107,9 @@
         <div class="grid md:grid-cols-12 gap-12 items-start">
             <div class="md:col-span-4 reveal">
                 <h2 class="text-3xl font-bold text-white mb-4 font-satoshi">Analisis Strategis</h2>
-                <div class="h-1 w-16 bg-accent rounded-full mb-6"></div>
+                <div class="h-1 w-16 bg-[#a3e635] rounded-full mb-6"></div>
                 <p class="text-emerald-50 text-sm leading-loose text-justify">
-                    Fase paling mematikan bagi kualitas gabah adalah <span class="text-accent font-bold bg-accent/10 px-1 rounded">48 jam setelah panen</span>. Keterlambatan pengeringan di titik ini memicu lonjakan kerusakan hingga 15%, menghancurkan nilai jual di pasar.
+                    Fase paling mematikan bagi kualitas gabah adalah <span class="text-[#a3e635] font-bold bg-[#a3e635]/10 px-1 rounded">48 jam setelah panen</span>. Keterlambatan pengeringan di titik ini memicu lonjakan kerusakan hingga 15%, menghancurkan nilai jual di pasar.
                 </p>
             </div>
             <div class="md:col-span-8 grid grid-cols-1 gap-6" id="cards-container">
@@ -113,7 +117,7 @@
                 <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-emerald-400/10 relative overflow-hidden hover-trigger">
                     <div class="spotlight-overlay"></div>
                     <div class="relative z-10 flex gap-6 items-start">
-                        <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
+                        <div class="w-12 h-12 rounded-2xl bg-[#a3e635]/10 flex items-center justify-center text-[#a3e635] shrink-0 group-hover:scale-110 transition-transform duration-500">
                             <span class="font-bold text-xl">01</span>
                         </div>
                         <div>
@@ -126,7 +130,7 @@
                 <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-emerald-400/10 relative overflow-hidden hover-trigger">
                     <div class="spotlight-overlay"></div>
                     <div class="relative z-10 flex gap-6 items-start">
-                        <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
+                        <div class="w-12 h-12 rounded-2xl bg-[#a3e635]/10 flex items-center justify-center text-[#a3e635] shrink-0 group-hover:scale-110 transition-transform duration-500">
                             <span class="font-bold text-xl">02</span>
                         </div>
                         <div>
@@ -139,7 +143,7 @@
                 <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-emerald-400/10 relative overflow-hidden hover-trigger">
                     <div class="spotlight-overlay"></div>
                     <div class="relative z-10 flex gap-6 items-start">
-                        <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
+                        <div class="w-12 h-12 rounded-2xl bg-[#a3e635]/10 flex items-center justify-center text-[#a3e635] shrink-0 group-hover:scale-110 transition-transform duration-500">
                             <span class="font-bold text-xl">03</span>
                         </div>
                         <div>
@@ -155,12 +159,12 @@
     <!-- DASHBOARD SECTION -->
     <main id="dashboard" class="reveal w-full container mx-auto px-6 md:px-12 py-20">
         <div class="relative group">
-            <!-- Glow Effect -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-accent via-emerald-400 to-accent rounded-[2.5rem] blur opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse"></div>
+            <!-- Glow Effect diupdate warnanya -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-[#a3e635] via-emerald-400 to-[#a3e635] rounded-[2.5rem] blur opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse"></div>
             <div class="relative glass-panel rounded-[2.2rem] p-2 border border-emerald-400/20 bg-[#064e3b]/90">
                 <div class="flex items-center justify-between px-8 py-5 border-b border-white/5">
                     <div class="flex items-center gap-3">
-                        <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+                        <span class="w-2 h-2 rounded-full bg-[#a3e635] animate-ping"></span>
                         <h2 class="text-sm font-bold text-white tracking-widest font-mono">LIVE MONITORING SYSTEM</h2>
                     </div>
                     <div class="hidden md:flex gap-4 text-[10px] font-mono text-emerald-300">
@@ -184,21 +188,21 @@
     <!-- SECTION PROFIL KELOMPOK -->
     <section id="profil" class="container mx-auto px-6 md:px-12 py-24 relative z-20">
         <div class="text-center mb-16 reveal">
-            <span class="text-accent text-xs font-bold tracking-[0.4em] uppercase mb-4 block">The Minds Behind</span>
+            <span class="text-[#a3e635] text-xs font-bold tracking-[0.4em] uppercase mb-4 block">The Minds Behind</span>
             <h2 class="text-4xl md:text-5xl font-black text-white font-satoshi">Kelompok 8 - Kelas K2</h2>
         </div>
 
         <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
             <!-- Anggota 1 -->
-            <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-accent/50 hover:to-accent/5 transition-all duration-500 hover-trigger">
+            <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-[#a3e635]/50 hover:to-[#a3e635]/5 transition-all duration-500 hover-trigger">
                 <div class="bg-[#059669]/20 rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden backdrop-blur-md border border-white/5">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
-                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#a3e635]/10 blur-[50px] rounded-full group-hover:bg-[#a3e635]/30 transition-all"></div>
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#a3e635] group-hover:rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
                         <!-- Pastikan file wihaga.png ada -->
                         <img src="wihaga.png" alt="Wihaga" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
-                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Wihaga Satwika Ghrena</h3>
+                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-[#a3e635] transition-colors font-satoshi">Wihaga Satwika Ghrena</h3>
                         <p class="text-emerald-300 text-xs font-mono tracking-wider mb-2">LEAD RESEARCHER</p>
                         <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-300 font-mono">F3401241075</span>
                     </div>
@@ -206,15 +210,15 @@
             </div>
 
             <!-- Anggota 2 -->
-            <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-accent/50 hover:to-accent/5 transition-all duration-500 hover-trigger">
+            <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-[#a3e635]/50 hover:to-[#a3e635]/5 transition-all duration-500 hover-trigger">
                 <div class="bg-[#059669]/20 rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden backdrop-blur-md border border-white/5">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
-                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:-rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#a3e635]/10 blur-[50px] rounded-full group-hover:bg-[#a3e635]/30 transition-all"></div>
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#a3e635] group-hover:-rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
                         <!-- Pastikan file omar.png ada -->
                         <img src="omar.png" alt="Omar" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
-                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Aditya Omar Ardany</h3>
+                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-[#a3e635] transition-colors font-satoshi">Aditya Omar Ardany</h3>
                         <p class="text-emerald-300 text-xs font-mono tracking-wider mb-2">DATA ANALYST</p>
                         <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-300 font-mono">F3401241087</span>
                     </div>
@@ -225,11 +229,11 @@
 
     <footer class="py-12 text-center border-t border-emerald-500/20 bg-[#043d2e]">
         <div class="flex items-center justify-center gap-3 mb-4">
-            <span class="w-2 h-2 rounded-full bg-accent"></span>
+            <span class="w-2 h-2 rounded-full bg-[#a3e635]"></span>
             <p class="text-xs tracking-[0.3em] text-emerald-300 uppercase font-bold">Agritech Intelligence Unit</p>
-            <span class="w-2 h-2 rounded-full bg-accent"></span>
+            <span class="w-2 h-2 rounded-full bg-[#a3e635]"></span>
         </div>
-        <p class="text-[10px] text-emerald-500 font-mono">EST. 2024 • PRECISION AGRICULTURE DATA</p>
+        <p class="text-[10px] text-emerald-500 font-mono">EST. 2025 • PRECISION AGRICULTURE DATA</p>
     </footer>
 
     <script src="script.js"></script>
