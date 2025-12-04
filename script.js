@@ -1,5 +1,5 @@
 /**
- * ULTIMATE AGRITECH INTERACTIVITY (FINAL)
+ * ULTIMATE AGRITECH INTERACTIVITY (FINAL REFINED v2)
  */
 
 // --- 1. PRELOADER ---
@@ -32,36 +32,45 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. RESTORED MOUSE PARALLAX FOR ORBS (FIXED & SMOOTH) ---
-// Menggunakan Linear Interpolation (LERP) agar orbs bergerak halus dan nyata
+// --- 2. FIXED PARALLAX ORBS (LAYER & MOVEMENT FIX) ---
+// FIX 1: Paksa Z-Index agar Orb muncul di DEPAN background hijau tapi di BELAKANG konten
+const parallaxContainer = document.getElementById('parallax-bg');
+if (parallaxContainer) {
+    parallaxContainer.style.zIndex = '-1'; // Naikkan layer di atas dynamic-bg (-2)
+}
+
+// FIX 2: Movement Logic yang lebih responsif
 let mouseX = 0;
 let mouseY = 0;
 let targetX = 0;
 let targetY = 0;
 
-// Titik tengah layar
 const windowHalfX = window.innerWidth / 2;
 const windowHalfY = window.innerHeight / 2;
 
 document.addEventListener('mousemove', (e) => {
-    // Gunakan clientX/Y agar orb tetap di view saat scroll
     mouseX = (e.clientX - windowHalfX);
     mouseY = (e.clientY - windowHalfY);
+});
+
+// Update center point on resize
+window.addEventListener('resize', () => {
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
 });
 
 const orbs = document.querySelectorAll('.parallax-orb');
 
 function animateOrbs() {
-    // LERP: Mengejar posisi mouse dengan delay halus (0.1)
-    targetX += (mouseX - targetX) * 0.1;
-    targetY += (mouseY - targetY) * 0.1;
+    // LERP dengan faktor 0.08 agar movement terasa "berat" dan organik
+    targetX += (mouseX - targetX) * 0.08;
+    targetY += (mouseY - targetY) * 0.08;
 
     orbs.forEach(orb => {
         const speed = parseFloat(orb.getAttribute('data-speed') || 1);
-        
-        // Kalkulasi posisi baru (dibagi 15 agar movement terasa tapi tidak liar)
-        const x = (targetX * speed) / 15; 
-        const y = (targetY * speed) / 15;
+        // Perbesar faktor pengali (30 -> 50) agar gerakan lebih terlihat
+        const x = (targetX * speed) / 20; 
+        const y = (targetY * speed) / 20;
         
         orb.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
@@ -69,47 +78,79 @@ function animateOrbs() {
     requestAnimationFrame(animateOrbs);
 }
 
-// Jalankan animasi jika ada orb
 if (orbs.length > 0) {
     animateOrbs();
 }
 
-// --- 3. SEED TRAIL EFFECT ---
+// --- 3. SEED TRAIL EFFECT (IMPROVED PHYSICS) ---
 document.addEventListener('mousemove', (e) => {
-    if (Math.random() > 0.15) return; 
+    // Throttle agar tidak terlalu berat
+    if (Math.random() > 0.3) return; 
+
     const seed = document.createElement('div');
     seed.classList.add('seed-particle');
+    
+    // Styling Golden Grain
+    seed.style.position = 'fixed';
+    seed.style.width = '6px';
+    seed.style.height = '10px'; // Lebih lonjong
+    seed.style.backgroundColor = '#fbbf24'; // Amber-400 (Emas)
+    seed.style.borderRadius = '50%'; // Oval
+    seed.style.pointerEvents = 'none';
+    seed.style.zIndex = '9998';
     seed.style.left = `${e.clientX}px`;
     seed.style.top = `${e.clientY}px`;
-    seed.style.transform = `rotate(${Math.random() * 360}deg)`;
+    
+    // Physics Randomizer
+    const rotation = Math.random() * 360;
+    const fallDistance = 50 + Math.random() * 50; // Jatuh lebih jauh
+    const drift = (Math.random() - 0.5) * 40; // Melayang ke kiri/kanan
+    
+    seed.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1s';
+    seed.style.opacity = '1';
+    seed.style.transform = `rotate(${rotation}deg) scale(1)`;
+
     document.body.appendChild(seed);
+
+    // Trigger Animasi (next frame)
+    requestAnimationFrame(() => {
+        seed.style.opacity = '0';
+        seed.style.transform = `translate(${drift}px, ${fallDistance}px) rotate(${rotation + 180}deg) scale(0.5)`;
+    });
+    
     setTimeout(() => seed.remove(), 1000);
 });
 
-// --- 4. ANIMATED COUNTERS ---
+// --- 4. ANIMATED COUNTERS (ROBUST LOGIC) ---
 const counters = document.querySelectorAll('.counter');
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const counter = entry.target;
-            const target = +counter.getAttribute('data-target');
-            const duration = 2000;
-            const increment = target / (duration / 30);
-            let current = 0;
-            const updateCounter = () => {
-                current += increment;
-                if (current < target) {
-                    counter.innerText = Math.ceil(current);
-                    requestAnimationFrame(updateCounter);
-                } else {
+            const target = parseInt(counter.getAttribute('data-target'));
+            
+            // Gunakan interval sederhana agar pasti jalan di semua browser
+            let count = 0;
+            const duration = 1500; // 1.5 detik total
+            const intervalTime = 20; // update tiap 20ms
+            const steps = duration / intervalTime;
+            const increment = target / steps;
+
+            const timer = setInterval(() => {
+                count += increment;
+                if (count >= target) {
                     counter.innerText = target;
+                    clearInterval(timer);
+                } else {
+                    counter.innerText = Math.ceil(count);
                 }
-            };
-            updateCounter();
+            }, intervalTime);
+            
             counterObserver.unobserve(counter);
         }
     });
-}, { threshold: 0.1 });
+}, { threshold: 0.1 }); // Sensitivitas tinggi (10% muncul langsung trigger)
+
 counters.forEach(counter => counterObserver.observe(counter));
 
 // --- 5. AUDIO PLAYER TOGGLE ---
