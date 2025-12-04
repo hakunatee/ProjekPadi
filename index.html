@@ -40,18 +40,12 @@
         </div>
     </div>
     
-    <!-- CANVAS PARTICLES (Kunang-kunang) -->
-    <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10"></canvas>
+    <!-- CANVAS PARTICLES (High Resolution Fireflies) -->
+    <!-- Z-Index -1 agar di atas background tapi di bawah konten -->
+    <canvas id="particle-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]"></canvas>
     
-    <!-- DYNAMIC BACKGROUND ORBS (Yang Sempat Hilang) -->
-    <div id="parallax-bg" class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div data-speed="2" class="parallax-orb absolute top-[-5%] left-[-5%] w-[500px] h-[500px] bg-[#a3e635]/10 rounded-full blur-[120px]"></div>
-        <div data-speed="-1" class="parallax-orb absolute bottom-[10%] right-[-10%] w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px]"></div>
-        <div data-speed="1" class="parallax-orb absolute top-[40%] left-[40%] w-64 h-64 bg-[#a3e635]/5 rounded-full blur-[80px]"></div>
-    </div>
-
-    <!-- BACKGROUND BASE & TEXTURE -->
-    <div class="dynamic-bg"></div>
+    <!-- BACKGROUND BASE -->
+    <div class="dynamic-bg fixed inset-0 z-[-2] bg-[radial-gradient(circle_at_50%_0%,_#10b981_0%,_#064e3b_40%,_#022c22_90%)]"></div>
 
     <!-- NAVBAR -->
     <nav class="navbar">
@@ -71,21 +65,19 @@
 
     <!-- HERO SECTION -->
     <header id="home" class="pt-32 pb-10 px-6 md:px-12 container mx-auto flex flex-col md:flex-row items-center gap-12 min-h-[95vh]">
-        <div class="w-full md:w-5/12 text-left z-10 parallax-text-container">
+        <div class="w-full md:w-5/12 text-left z-10">
             <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#a3e635]/20 bg-[#a3e635]/10 mb-6 backdrop-blur-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#a3e635] animate-pulse"></span>
                 <p class="text-[10px] font-bold tracking-[0.2em] text-[#a3e635] uppercase">AI Powered Agriculture</p>
             </div>
             
-            <!-- Parallax Text Effect -->
-            <h1 class="reveal-text text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight font-satoshi perspective-text">
-                <span class="layer" data-depth="0.05">Pantau</span> 
-                <span class="text-[#a3e635] relative inline-block glitch-effect layer" data-text="Rugi" data-depth="0.1">Rugi</span><br>
-                <span class="layer" data-depth="0.08">Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#a3e635]">Padi.</span></span>
+            <h1 class="reveal-text text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight font-satoshi">
+                Pantau <span class="text-[#a3e635] relative inline-block glitch-effect" data-text="Rugi">Rugi</span><br>
+                Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#a3e635]">Padi.</span>
             </h1>
             
             <p class="reveal text-sm md:text-base text-emerald-100 font-light leading-relaxed max-w-lg mb-10">
-                Teknologi integrasi data presisi untuk menekan <em class="text-white">Post-Harvest Loss</em> dan memaksimalkan profitabilitas petani Indonesia.
+                Teknologi integrasi data presisi untuk menekan <em class="text-white">Post-Harvest Loss</em> dan memaksimalkan profitabilitas petani Indonesia melalui analisis real-time.
             </p>
             
             <div class="reveal flex gap-4">
@@ -93,15 +85,15 @@
                     <span>Buka Dashboard</span>
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
-                <a href="#analisis" class="px-8 py-4 border border-emerald-400/30 text-white rounded-full text-xs hover:bg-white/10 transition-colors backdrop-blur-sm hover-trigger">
-                    Analisis
+                <a href="#profil" class="px-8 py-4 border border-emerald-400/30 text-white rounded-full text-xs hover:bg-white/10 transition-colors backdrop-blur-sm hover-trigger">
+                    Lihat Tim
                 </a>
             </div>
         </div>
 
         <div class="w-full md:w-7/12 h-[400px] md:h-[500px] relative z-10 reveal perspective-container">
             <div id="hero-tilt" class="w-full h-full rounded-[2.5rem] overflow-hidden border border-emerald-400/30 shadow-2xl relative bg-[#064e3b] hover-trigger">
-                <!-- Image Slider -->
+                <!-- Pastikan file slide ada: slide1.jpg, slide2.jpg, slide3.jpg -->
                 <div class="slide active" style="background-image: url('slide1.jpg');"></div>
                 <div class="slide" style="background-image: url('slide2.jpg');"></div>
                 <div class="slide" style="background-image: url('slide3.jpg');"></div>
@@ -129,7 +121,7 @@
                 <h2 class="text-3xl font-bold text-white mb-4 font-satoshi">Analisis Strategis</h2>
                 <div class="h-1 w-16 bg-[#a3e635] rounded-full mb-6"></div>
                 <p class="text-emerald-50 text-sm leading-loose text-justify">
-                    Fase paling mematikan bagi kualitas gabah adalah <span class="text-[#a3e635] font-bold bg-[#a3e635]/10 px-1 rounded">48 jam setelah panen</span>. 
+                    Fase paling mematikan bagi kualitas gabah adalah <span class="text-[#a3e635] font-bold bg-[#a3e635]/10 px-1 rounded">48 jam setelah panen</span>. Keterlambatan pengeringan di titik ini memicu lonjakan kerusakan hingga 15%, menghancurkan nilai jual di pasar.
                 </p>
                 <!-- ANIMATED COUNTER -->
                 <div class="mt-8 grid grid-cols-2 gap-4">
@@ -204,7 +196,13 @@
                     </div>
                 </div>
                 <div class="dashboard-container w-full h-[85vh] min-h-[600px] rounded-b-[2rem] overflow-hidden bg-white">
-                    <iframe title="Rice Post-Harvest Loss Dashboard" src="https://app.powerbi.com/reportEmbed?reportId=761c2b43-3805-43e9-b48b-62f1ca96a6d1&autoAuth=true&ctid=fedd5298-8e66-45f1-b321-fd38ad0ff722" frameborder="0" allowFullScreen="true" class="w-full h-full"></iframe>
+                    <iframe 
+                        title="Rice Post-Harvest Loss Dashboard" 
+                        src="https://app.powerbi.com/reportEmbed?reportId=761c2b43-3805-43e9-b48b-62f1ca96a6d1&autoAuth=true&ctid=fedd5298-8e66-45f1-b321-fd38ad0ff722" 
+                        frameborder="0" 
+                        allowFullScreen="true"
+                        class="w-full h-full"
+                    ></iframe>
                 </div>
             </div>
         </div>
@@ -216,11 +214,14 @@
             <span class="text-[#a3e635] text-xs font-bold tracking-[0.4em] uppercase mb-4 block">The Minds Behind</span>
             <h2 class="text-4xl md:text-5xl font-black text-white font-satoshi">Kelompok 8 - Kelas K2</h2>
         </div>
+
         <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-            <!-- Wihaga -->
+            <!-- Anggota 1 -->
             <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-[#a3e635]/50 hover:to-[#a3e635]/5 transition-all duration-500 hover-trigger">
                 <div class="bg-[#059669]/20 rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden backdrop-blur-md border border-white/5">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#a3e635]/10 blur-[50px] rounded-full group-hover:bg-[#a3e635]/30 transition-all"></div>
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#a3e635] group-hover:rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
+                        <!-- Pastikan file wihaga.png ada -->
                         <img src="wihaga.png" alt="Wihaga" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
@@ -230,10 +231,13 @@
                     </div>
                 </div>
             </div>
-            <!-- Omar -->
+
+            <!-- Anggota 2 -->
             <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-[#a3e635]/50 hover:to-[#a3e635]/5 transition-all duration-500 hover-trigger">
                 <div class="bg-[#059669]/20 rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden backdrop-blur-md border border-white/5">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#a3e635]/10 blur-[50px] rounded-full group-hover:bg-[#a3e635]/30 transition-all"></div>
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#a3e635] group-hover:-rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
+                        <!-- Pastikan file omar.png ada -->
                         <img src="omar.png" alt="Omar" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
