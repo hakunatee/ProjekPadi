@@ -32,20 +32,47 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. RESTORED MOUSE PARALLAX FOR ORBS ---
-// Menggerakkan orbs di background
+// --- 2. RESTORED MOUSE PARALLAX FOR ORBS (FIXED & SMOOTH) ---
+// Menggunakan Linear Interpolation (LERP) agar orbs bergerak halus dan nyata
+let mouseX = 0;
+let mouseY = 0;
+let targetX = 0;
+let targetY = 0;
+
+// Titik tengah layar
+const windowHalfX = window.innerWidth / 2;
+const windowHalfY = window.innerHeight / 2;
+
 document.addEventListener('mousemove', (e) => {
-    const orbs = document.querySelectorAll('.parallax-orb');
-    // Hitung posisi relatif mouse dari tengah layar
-    const x = (window.innerWidth - e.pageX * 2) / 100;
-    const y = (window.innerHeight - e.pageY * 2) / 100;
+    // Gunakan clientX/Y agar orb tetap di view saat scroll
+    mouseX = (e.clientX - windowHalfX);
+    mouseY = (e.clientY - windowHalfY);
+});
+
+const orbs = document.querySelectorAll('.parallax-orb');
+
+function animateOrbs() {
+    // LERP: Mengejar posisi mouse dengan delay halus (0.1)
+    targetX += (mouseX - targetX) * 0.1;
+    targetY += (mouseY - targetY) * 0.1;
 
     orbs.forEach(orb => {
-        const speed = orb.getAttribute('data-speed');
-        // Pindahkan orb berdasarkan kecepatan masing-masing
-        orb.style.transform = `translateX(${x * speed}px) translateY(${y * speed}px)`;
+        const speed = parseFloat(orb.getAttribute('data-speed') || 1);
+        
+        // Kalkulasi posisi baru (dibagi 15 agar movement terasa tapi tidak liar)
+        const x = (targetX * speed) / 15; 
+        const y = (targetY * speed) / 15;
+        
+        orb.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
-});
+
+    requestAnimationFrame(animateOrbs);
+}
+
+// Jalankan animasi jika ada orb
+if (orbs.length > 0) {
+    animateOrbs();
+}
 
 // --- 3. SEED TRAIL EFFECT ---
 document.addEventListener('mousemove', (e) => {
