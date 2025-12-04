@@ -68,27 +68,31 @@ window.addEventListener('resize', () => {
 });
 
 function animateOrbs() {
-    // 1. Gerakan Mouse (LERP)
-    targetX += (mouseX - targetX) * 0.05;
-    targetY += (mouseY - targetY) * 0.05;
+    // 1. Gerakan Mouse (LERP) - Responsivitas ditingkatkan (0.05 -> 0.1)
+    targetX += (mouseX - targetX) * 0.1;
+    targetY += (mouseY - targetY) * 0.1;
 
     // 2. Gerakan Otomatis (Floating/Bernapas)
-    time += 0.02; // Kecepatan float
+    time += 0.03; // Kecepatan float sedikit dipercepat
 
     orbs.forEach((orb, index) => {
         const speed = parseFloat(orb.getAttribute('data-speed') || 1);
         
-        // Posisi Mouse
-        const xMouse = (targetX * speed) / 15; 
-        const yMouse = (targetY * speed) / 15;
+        // Posisi Mouse - Range gerakan diperbesar (pembagi diperkecil dari 15 ke 8)
+        const xMouse = (targetX * speed) / 8; 
+        const yMouse = (targetY * speed) / 8;
         
-        // Posisi Float Otomatis (Sinusoidal Wave)
-        // Gunakan index agar setiap bola punya pola gerakan beda
-        const xFloat = Math.sin(time + index) * 20 * speed;
-        const yFloat = Math.cos(time * 0.8 + index) * 15 * speed;
+        // Posisi Float Otomatis (Sinusoidal Wave) - Amplitudo diperbesar
+        // Agar terlihat jelas backgroundnya bergerak sendiri
+        const xFloat = Math.sin(time + index) * 50 * speed; // 20 -> 50
+        const yFloat = Math.cos(time * 0.7 + index) * 40 * speed; // 15 -> 40
         
         // Gabungkan keduanya
         orb.style.transform = `translate3d(${xMouse + xFloat}px, ${yMouse + yFloat}px, 0)`;
+        
+        // Efek Pulsing Opacity (Biar makin kelihatan dinamis/hidup)
+        // Opacity akan berdenyut antara 0.3 hingga 0.7
+        orb.style.opacity = 0.5 + Math.sin(time * 0.5 + index) * 0.2;
     });
 
     requestAnimationFrame(animateOrbs);
