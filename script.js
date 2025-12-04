@@ -32,67 +32,40 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. FIXED PARALLAX ORBS (AUTO-FLOAT & MOUSE INTERACTION) ---
+// --- 2. FIXED PARALLAX ORBS (FULLY AUTOMATIC) ---
+// Background bergerak sendiri tanpa perlu mouse
 const parallaxContainer = document.getElementById('parallax-bg');
 const orbs = document.querySelectorAll('.parallax-orb');
 
-// FIX 1: Paksa Z-Index & Visibility agar pasti muncul
 if (parallaxContainer) {
     parallaxContainer.style.zIndex = '-1'; 
     parallaxContainer.style.display = 'block';
 }
 
-// Hapus transisi CSS yang mungkin bikin macet
 orbs.forEach(orb => {
     orb.style.transition = 'none'; 
 });
 
-// Setup Variabel Gerak
-let mouseX = 0;
-let mouseY = 0;
-let targetX = 0;
-let targetY = 0;
 let time = 0; // Waktu untuk animasi otomatis
 
-const windowHalfX = window.innerWidth / 2;
-const windowHalfY = window.innerHeight / 2;
-
-document.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX - windowHalfX);
-    mouseY = (e.clientY - windowHalfY);
-});
-
-window.addEventListener('resize', () => {
-    const windowHalfX = window.innerWidth / 2;
-    const windowHalfY = window.innerHeight / 2;
-});
-
 function animateOrbs() {
-    // 1. Gerakan Mouse (LERP) - Responsivitas ditingkatkan (0.05 -> 0.1)
-    targetX += (mouseX - targetX) * 0.1;
-    targetY += (mouseY - targetY) * 0.1;
-
-    // 2. Gerakan Otomatis (Floating/Bernapas)
-    time += 0.03; // Kecepatan float sedikit dipercepat
+    // Kecepatan waktu berjalan
+    time += 0.015; 
 
     orbs.forEach((orb, index) => {
         const speed = parseFloat(orb.getAttribute('data-speed') || 1);
         
-        // Posisi Mouse - Range gerakan diperbesar (pembagi diperkecil dari 15 ke 8)
-        const xMouse = (targetX * speed) / 8; 
-        const yMouse = (targetY * speed) / 8;
+        // Gerakan Otomatis (Floating/Bernapas)
+        // Menggunakan kombinasi Sinus & Cosinus dengan frekuensi berbeda agar gerakannya tidak kaku
+        // Jarak tempuh diperbesar (80px dan 60px) agar terlihat jelas bergerak sendiri
+        const xFloat = Math.sin(time * 0.5 + index) * 80 * speed;
+        const yFloat = Math.cos(time * 0.3 + index * 1.5) * 60 * speed;
         
-        // Posisi Float Otomatis (Sinusoidal Wave) - Amplitudo diperbesar
-        // Agar terlihat jelas backgroundnya bergerak sendiri
-        const xFloat = Math.sin(time + index) * 50 * speed; // 20 -> 50
-        const yFloat = Math.cos(time * 0.7 + index) * 40 * speed; // 15 -> 40
+        // Terapkan posisi
+        orb.style.transform = `translate3d(${xFloat}px, ${yFloat}px, 0)`;
         
-        // Gabungkan keduanya
-        orb.style.transform = `translate3d(${xMouse + xFloat}px, ${yMouse + yFloat}px, 0)`;
-        
-        // Efek Pulsing Opacity (Biar makin kelihatan dinamis/hidup)
-        // Opacity akan berdenyut antara 0.3 hingga 0.7
-        orb.style.opacity = 0.5 + Math.sin(time * 0.5 + index) * 0.2;
+        // Efek Pulsing Opacity (Kedip-kedip halus)
+        orb.style.opacity = 0.5 + Math.sin(time * 0.8 + index) * 0.3;
     });
 
     requestAnimationFrame(animateOrbs);
