@@ -4,51 +4,39 @@
  */
 
 // --- 1. PRELOADER & INITIALIZATION LOGIC ---
-// Variable untuk tracking status loading
 let progress = 0;
 const progressText = document.getElementById('progress-text');
 const progressBar = document.getElementById('progress-bar');
 const preloader = document.getElementById('preloader');
 
-// Fungsi untuk memulai animasi masuk (Entrance)
 function initHeroSequence() {
     const reveals = document.querySelectorAll('.reveal');
     reveals.forEach((el, index) => {
         setTimeout(() => {
             el.classList.add('active');
-        }, index * 150 + 300); // Staggered animation
+        }, index * 150 + 300); 
     });
 
-    // Scramble effect for title text
     const glitchText = document.querySelector('.glitch-effect');
     if(glitchText) scrambleText(glitchText);
 }
 
-// Simulasi Loading 0-100%
 const loadingInterval = setInterval(() => {
-    // Kecepatan random agar terasa natural
     progress += Math.floor(Math.random() * 3) + 1;
-    
     if (progress > 100) progress = 100;
 
-    // Update UI
     if (progressText) progressText.innerText = `${progress}%`;
     if (progressBar) progressBar.style.width = `${progress}%`;
 
-    // Jika sudah 100%, hilangkan preloader
     if (progress === 100) {
         clearInterval(loadingInterval);
-        
         setTimeout(() => {
-            // Hilangkan preloader
             document.body.classList.add('loaded');
             document.body.classList.remove('loading-state');
-            
-            // Jalankan animasi halaman utama
             initHeroSequence();
-        }, 500); // Delay sebentar saat 100% sebelum hilang
+        }, 500);
     }
-}, 30); // Kecepatan update (semakin kecil semakin cepat)
+}, 30);
 
 
 // --- 2. CUSTOM CURSOR SYSTEM ---
@@ -60,12 +48,8 @@ if (cursorDot && cursorOutline) {
     window.addEventListener('mousemove', (e) => {
         const posX = e.clientX;
         const posY = e.clientY;
-
-        // Dot follows instantly
         cursorDot.style.left = `${posX}px`;
         cursorDot.style.top = `${posY}px`;
-
-        // Outline follows with lag (animation)
         cursorOutline.animate({
             left: `${posX}px`,
             top: `${posY}px`
@@ -73,14 +57,9 @@ if (cursorDot && cursorOutline) {
     });
 }
 
-// Magnetic & Hover Effects
 hoverTriggers.forEach(trigger => {
-    trigger.addEventListener('mouseenter', () => {
-        document.body.classList.add('hovering');
-    });
-    trigger.addEventListener('mouseleave', () => {
-        document.body.classList.remove('hovering');
-    });
+    trigger.addEventListener('mouseenter', () => { document.body.classList.add('hovering'); });
+    trigger.addEventListener('mouseleave', () => { document.body.classList.remove('hovering'); });
 });
 
 
@@ -106,10 +85,8 @@ if (canvas) {
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
-            if (this.size > 0.2) this.size -= 0.005; // Twinkle effect
+            if (this.size > 0.2) this.size -= 0.005;
             if (this.size <= 0.2) this.size = Math.random() * 2 + 0.5;
-
-            // Wrap around screen
             if (this.x > canvas.width) this.x = 0;
             if (this.x < 0) this.x = canvas.width;
             if (this.y > canvas.height) this.y = 0;
@@ -139,7 +116,6 @@ if (canvas) {
     initParticles();
     animateParticles();
 
-    // Resize Canvas
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -147,32 +123,25 @@ if (canvas) {
 }
 
 
-// --- 4. SPOTLIGHT CARD EFFECT (MOUSE TRACKING GLOW) ---
+// --- 4. SPOTLIGHT CARD EFFECT ---
 const cardsContainer = document.getElementById('cards-container');
 const profilContainer = document.getElementById('profil');
 
-if (cardsContainer) {
-    cardsContainer.onmousemove = e => {
-        for(const card of document.querySelectorAll('#cards-container .spotlight-card')) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty("--mouse-x", `${x}px`);
-            card.style.setProperty("--mouse-y", `${y}px`);
-        }
-    };
-}
+const updateSpotlight = (e, container) => {
+    for(const card of container.querySelectorAll('.spotlight-card')) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+    }
+};
 
+if (cardsContainer) {
+    cardsContainer.onmousemove = e => updateSpotlight(e, cardsContainer);
+}
 if (profilContainer) {
-    profilContainer.onmousemove = e => {
-        for(const card of document.querySelectorAll('#profil .spotlight-card')) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            card.style.setProperty("--mouse-x", `${x}px`);
-            card.style.setProperty("--mouse-y", `${y}px`);
-        }
-    };
+    profilContainer.onmousemove = e => updateSpotlight(e, profilContainer);
 }
 
 
