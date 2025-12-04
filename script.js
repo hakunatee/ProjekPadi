@@ -1,5 +1,5 @@
 /**
- * ULTIMATE AGRITECH INTERACTIVITY (FINAL REFINED v2)
+ * ULTIMATE AGRITECH INTERACTIVITY (FINAL REFINED v3)
  */
 
 // --- 1. PRELOADER ---
@@ -32,72 +32,118 @@ const loadingInterval = setInterval(() => {
     }
 }, 30);
 
-// --- 2. FIXED PARALLAX ORBS (FULLY AUTOMATIC) ---
-// Background bergerak sendiri tanpa perlu mouse
-const parallaxContainer = document.getElementById('parallax-bg');
-const orbs = document.querySelectorAll('.parallax-orb');
+// --- 2. DYNAMIC BACKGROUND (CANVAS PARTICLES - FIREFLIES) ---
+// REVISI: Menggunakan Canvas untuk partikel kecil, jelas, dan bergerak otomatis
+const canvas = document.getElementById('particle-canvas');
+const parallaxBg = document.getElementById('parallax-bg');
 
-if (parallaxContainer) {
-    parallaxContainer.style.zIndex = '-1'; 
-    parallaxContainer.style.display = 'block';
+// Sembunyikan orb besar yang "samar" agar tidak mengganggu
+if (parallaxBg) {
+    parallaxBg.style.display = 'none'; 
 }
 
-orbs.forEach(orb => {
-    orb.style.transition = 'none'; 
-});
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-let time = 0; // Waktu untuk animasi otomatis
+    let particles = [];
+    // Jumlah partikel disesuaikan agar tidak terlalu ramai tapi terlihat jelas
+    const particleCount = window.innerWidth < 768 ? 30 : 60; 
 
-function animateOrbs() {
-    // Kecepatan waktu berjalan
-    time += 0.015; 
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            // Kecepatan gerak otomatis (Tanpa Mouse)
+            this.vx = (Math.random() - 0.5) * 1.5; 
+            this.vy = (Math.random() - 0.5) * 1.5;
+            // Ukuran kecil-kecil sesuai request (1px - 3px)
+            this.size = Math.random() * 2 + 1; 
+            this.baseOpacity = Math.random() * 0.5 + 0.3; // Lebih jelas (min 0.3)
+            this.opacity = this.baseOpacity;
+            this.fadeSpeed = 0.01;
+        }
 
-    orbs.forEach((orb, index) => {
-        const speed = parseFloat(orb.getAttribute('data-speed') || 1);
-        
-        // Gerakan Otomatis (Floating/Bernapas)
-        // Menggunakan kombinasi Sinus & Cosinus dengan frekuensi berbeda agar gerakannya tidak kaku
-        // Jarak tempuh diperbesar (80px dan 60px) agar terlihat jelas bergerak sendiri
-        const xFloat = Math.sin(time * 0.5 + index) * 80 * speed;
-        const yFloat = Math.cos(time * 0.3 + index * 1.5) * 60 * speed;
-        
-        // Terapkan posisi
-        orb.style.transform = `translate3d(${xFloat}px, ${yFloat}px, 0)`;
-        
-        // Efek Pulsing Opacity (Kedip-kedip halus)
-        orb.style.opacity = 0.5 + Math.sin(time * 0.8 + index) * 0.3;
+        update() {
+            // Gerak terus menerus
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Pantulan di tepi layar (Bounce)
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            
+            // Efek Kedip (Twinkle)
+            this.opacity += this.fadeSpeed;
+            if (this.opacity > this.baseOpacity + 0.2 || this.opacity < this.baseOpacity - 0.2) {
+                this.fadeSpeed *= -1;
+            }
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            // Warna Lime Green yang menyala
+            ctx.fillStyle = `rgba(163, 230, 53, ${this.opacity})`;
+            // Efek Glow
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#a3e635';
+            ctx.fill();
+            // Reset shadow untuk performa
+            ctx.shadowBlur = 0; 
+        }
+    }
+
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
+
+    // Handle Resize
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
     });
-
-    requestAnimationFrame(animateOrbs);
 }
 
-if (orbs.length > 0) {
-    animateOrbs();
-}
-
-// --- 3. SEED TRAIL EFFECT (IMPROVED PHYSICS) ---
+// --- 3. SEED TRAIL EFFECT (INTERACTIVE) ---
 document.addEventListener('mousemove', (e) => {
-    // Throttle agar tidak terlalu berat
-    if (Math.random() > 0.3) return; 
+    // Throttle agar performa tetap ringan
+    if (Math.random() > 0.2) return; 
 
     const seed = document.createElement('div');
     seed.classList.add('seed-particle');
     
     // Styling Golden Grain
     seed.style.position = 'fixed';
-    seed.style.width = '6px';
-    seed.style.height = '10px'; // Lebih lonjong
-    seed.style.backgroundColor = '#fbbf24'; // Amber-400 (Emas)
-    seed.style.borderRadius = '50%'; // Oval
+    seed.style.width = '5px';
+    seed.style.height = '8px'; 
+    seed.style.backgroundColor = '#fbbf24'; // Emas
+    seed.style.borderRadius = '50%'; 
     seed.style.pointerEvents = 'none';
     seed.style.zIndex = '9998';
     seed.style.left = `${e.clientX}px`;
     seed.style.top = `${e.clientY}px`;
     
-    // Physics Randomizer
     const rotation = Math.random() * 360;
-    const fallDistance = 50 + Math.random() * 50; // Jatuh lebih jauh
-    const drift = (Math.random() - 0.5) * 40; // Melayang ke kiri/kanan
+    const fallDistance = 60 + Math.random() * 40;
+    const drift = (Math.random() - 0.5) * 60;
     
     seed.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1s';
     seed.style.opacity = '1';
@@ -105,7 +151,6 @@ document.addEventListener('mousemove', (e) => {
 
     document.body.appendChild(seed);
 
-    // Trigger Animasi (next frame)
     requestAnimationFrame(() => {
         seed.style.opacity = '0';
         seed.style.transform = `translate(${drift}px, ${fallDistance}px) rotate(${rotation + 180}deg) scale(0.5)`;
@@ -114,7 +159,7 @@ document.addEventListener('mousemove', (e) => {
     setTimeout(() => seed.remove(), 1000);
 });
 
-// --- 4. ANIMATED COUNTERS (ROBUST LOGIC) ---
+// --- 4. ANIMATED COUNTERS ---
 const counters = document.querySelectorAll('.counter');
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -122,10 +167,9 @@ const counterObserver = new IntersectionObserver((entries) => {
             const counter = entry.target;
             const target = parseInt(counter.getAttribute('data-target'));
             
-            // Gunakan interval sederhana agar pasti jalan di semua browser
             let count = 0;
-            const duration = 1500; // 1.5 detik total
-            const intervalTime = 20; // update tiap 20ms
+            const duration = 2000;
+            const intervalTime = 30;
             const steps = duration / intervalTime;
             const increment = target / steps;
 
@@ -142,7 +186,7 @@ const counterObserver = new IntersectionObserver((entries) => {
             counterObserver.unobserve(counter);
         }
     });
-}, { threshold: 0.1 }); // Sensitivitas tinggi (10% muncul langsung trigger)
+}, { threshold: 0.1 }); 
 
 counters.forEach(counter => counterObserver.observe(counter));
 
