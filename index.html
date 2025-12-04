@@ -15,9 +15,8 @@
     <div id="cursor-dot"></div>
     <div id="cursor-outline"></div>
 
-    <!-- CINEMATIC PRELOADER -->
-    <!-- Z-Index 100 agar di paling atas -->
-    <div id="preloader" class="fixed inset-0 z-[100] bg-[#022c22] flex flex-col items-center justify-center text-white">
+    <!-- CINEMATIC PRELOADER (Warna Segar) -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-[#064e3b] flex flex-col items-center justify-center text-white">
         <div class="relative w-64 h-1 bg-white/10 rounded-full overflow-hidden mb-4">
             <div id="progress-bar" class="absolute top-0 left-0 h-full w-0 bg-accent transition-all duration-100 ease-out"></div>
         </div>
@@ -51,17 +50,17 @@
     <!-- HERO SECTION -->
     <header id="home" class="pt-32 pb-10 px-6 md:px-12 container mx-auto flex flex-col md:flex-row items-center gap-12 min-h-[95vh]">
         <div class="w-full md:w-5/12 text-left z-10">
-            <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 mb-6 backdrop-blur-sm">
+            <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/10 mb-6 backdrop-blur-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
                 <p class="text-[10px] font-bold tracking-[0.2em] text-accent uppercase">AI Powered Agriculture</p>
             </div>
             
             <h1 class="reveal-text text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight font-satoshi">
                 Pantau <span class="text-accent relative inline-block glitch-effect" data-text="Rugi">Rugi</span><br>
-                Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-200">Padi.</span>
+                Amankan <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-300">Padi.</span>
             </h1>
             
-            <p class="reveal text-sm md:text-base text-emerald-100/80 font-light leading-relaxed max-w-lg mb-10">
+            <p class="reveal text-sm md:text-base text-emerald-100 font-light leading-relaxed max-w-lg mb-10">
                 Teknologi integrasi data presisi untuk menekan <em class="text-white">Post-Harvest Loss</em> dan memaksimalkan profitabilitas petani Indonesia melalui analisis real-time.
             </p>
             
@@ -70,20 +69,20 @@
                     <span>Buka Dashboard</span>
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
-                <a href="#profil" class="px-8 py-4 border border-emerald-300/30 text-white rounded-full text-xs hover:bg-white/5 transition-colors backdrop-blur-sm hover-trigger">
+                <a href="#profil" class="px-8 py-4 border border-emerald-400/30 text-white rounded-full text-xs hover:bg-white/10 transition-colors backdrop-blur-sm hover-trigger">
                     Lihat Tim
                 </a>
             </div>
         </div>
 
         <div class="w-full md:w-7/12 h-[400px] md:h-[500px] relative z-10 reveal perspective-container">
-            <div id="hero-tilt" class="w-full h-full rounded-[2.5rem] overflow-hidden border border-emerald-300/20 shadow-2xl relative bg-[#064e3b] hover-trigger">
-                <!-- Pastikan file slide1.jpg, slide2.jpg, slide3.jpg ada di folder -->
-                <div class="slide active" style="background-image: url('./slide1.jpg');"></div>
-                <div class="slide" style="background-image: url('./slide2.jpg');"></div>
-                <div class="slide" style="background-image: url('./slide3.jpg');"></div>
+            <div id="hero-tilt" class="w-full h-full rounded-[2.5rem] overflow-hidden border border-emerald-400/30 shadow-2xl relative bg-[#064e3b] hover-trigger">
+                <!-- Pastikan file slide ada -->
+                <div class="slide active" style="background-image: url('slide1.jpg');"></div>
+                <div class="slide" style="background-image: url('slide2.jpg');"></div>
+                <div class="slide" style="background-image: url('slide3.jpg');"></div>
                 
-                <div class="absolute inset-0 bg-gradient-to-t from-[#022c22] via-transparent to-transparent opacity-80"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#064e3b] via-transparent to-transparent opacity-80"></div>
 
                 <div class="absolute bottom-6 left-6 right-6 p-6 glass-panel rounded-2xl flex justify-between items-end border border-white/10">
                     <div>
@@ -102,17 +101,16 @@
     <!-- ANALISIS SECTION -->
     <div id="analisis" class="container mx-auto px-6 md:px-12 py-20 max-w-7xl relative z-20">
         <div class="grid md:grid-cols-12 gap-12 items-start">
-            <!-- Menghapus class 'sticky top-32' agar tidak ikut scroll -->
             <div class="md:col-span-4 reveal">
                 <h2 class="text-3xl font-bold text-white mb-4 font-satoshi">Analisis Strategis</h2>
                 <div class="h-1 w-16 bg-accent rounded-full mb-6"></div>
-                <p class="text-emerald-100/90 text-sm leading-loose text-justify">
+                <p class="text-emerald-50 text-sm leading-loose text-justify">
                     Fase paling mematikan bagi kualitas gabah adalah <span class="text-accent font-bold bg-accent/10 px-1 rounded">48 jam setelah panen</span>. Keterlambatan pengeringan di titik ini memicu lonjakan kerusakan hingga 15%, menghancurkan nilai jual di pasar.
                 </p>
             </div>
             <div class="md:col-span-8 grid grid-cols-1 gap-6" id="cards-container">
                 <!-- Card 1 -->
-                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-white/5 relative overflow-hidden hover-trigger">
+                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-emerald-400/10 relative overflow-hidden hover-trigger">
                     <div class="spotlight-overlay"></div>
                     <div class="relative z-10 flex gap-6 items-start">
                         <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
@@ -120,12 +118,12 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-white mb-2 font-satoshi">Definisi Kerugian</h3>
-                            <p class="text-sm text-emerald-200/80 leading-relaxed">Kehilangan kuantitas (bobot) & kualitas (mutu) gabah dari sawah ke penggilingan. Bukan hanya soal beras yang hilang, tapi nilai ekonomi yang menguap.</p>
+                            <p class="text-sm text-emerald-100 leading-relaxed">Kehilangan kuantitas (bobot) & kualitas (mutu) gabah dari sawah ke penggilingan. Bukan hanya soal beras yang hilang, tapi nilai ekonomi yang menguap.</p>
                         </div>
                     </div>
                 </div>
                 <!-- Card 2 -->
-                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-white/5 relative overflow-hidden hover-trigger">
+                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-emerald-400/10 relative overflow-hidden hover-trigger">
                     <div class="spotlight-overlay"></div>
                     <div class="relative z-10 flex gap-6 items-start">
                         <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
@@ -133,12 +131,12 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-white mb-2 font-satoshi">Fase Kritis</h3>
-                            <p class="text-sm text-emerald-200/80 leading-relaxed">Harvesting (Panen) & Drying (Pengeringan) adalah "leher botol" utama. Kesalahan di sini bersifat permanen dan tidak bisa diperbaiki di penggilingan.</p>
+                            <p class="text-sm text-emerald-100 leading-relaxed">Harvesting (Panen) & Drying (Pengeringan) adalah "leher botol" utama. Kesalahan di sini bersifat permanen dan tidak bisa diperbaiki di penggilingan.</p>
                         </div>
                     </div>
                 </div>
                 <!-- Card 3 -->
-                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-white/5 relative overflow-hidden hover-trigger">
+                <div class="spotlight-card group p-8 rounded-3xl bg-white/5 border border-emerald-400/10 relative overflow-hidden hover-trigger">
                     <div class="spotlight-overlay"></div>
                     <div class="relative z-10 flex gap-6 items-start">
                         <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent shrink-0 group-hover:scale-110 transition-transform duration-500">
@@ -146,7 +144,7 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-white mb-2 font-satoshi">Dampak Makro</h3>
-                            <p class="text-sm text-emerald-200/80 leading-relaxed">Secara nasional, ini mengancam stok beras. Bagi petani individu, ini berarti pemotongan margin keuntungan hingga 20-30% per musim.</p>
+                            <p class="text-sm text-emerald-100 leading-relaxed">Secara nasional, ini mengancam stok beras. Bagi petani individu, ini berarti pemotongan margin keuntungan hingga 20-30% per musim.</p>
                         </div>
                     </div>
                 </div>
@@ -157,14 +155,15 @@
     <!-- DASHBOARD SECTION -->
     <main id="dashboard" class="reveal w-full container mx-auto px-6 md:px-12 py-20">
         <div class="relative group">
-            <div class="absolute -inset-1 bg-gradient-to-r from-accent via-emerald-500 to-accent rounded-[2.5rem] blur opacity-20 group-hover:opacity-50 transition duration-1000 animate-pulse"></div>
-            <div class="relative glass-panel rounded-[2.2rem] p-2 border border-emerald-300/10 bg-[#064e3b]/90">
+            <!-- Glow Effect lebih terang -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-accent via-emerald-400 to-accent rounded-[2.5rem] blur opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse"></div>
+            <div class="relative glass-panel rounded-[2.2rem] p-2 border border-emerald-400/20 bg-[#064e3b]/90">
                 <div class="flex items-center justify-between px-8 py-5 border-b border-white/5">
                     <div class="flex items-center gap-3">
                         <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
                         <h2 class="text-sm font-bold text-white tracking-widest font-mono">LIVE MONITORING SYSTEM</h2>
                     </div>
-                    <div class="hidden md:flex gap-4 text-[10px] font-mono text-emerald-400/70">
+                    <div class="hidden md:flex gap-4 text-[10px] font-mono text-emerald-300">
                         <span>LATENCY: 24ms</span>
                         <span>SERVER: JKT-01</span>
                     </div>
@@ -192,45 +191,45 @@
         <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
             <!-- Anggota 1 -->
             <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-accent/50 hover:to-accent/5 transition-all duration-500 hover-trigger">
-                <div class="bg-[#022c22] rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden">
+                <div class="bg-[#059669]/20 rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden backdrop-blur-md border border-white/5">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
-                        <!-- Pastikan file wihaga.png ada di folder yang sama -->
-                        <img src="./wihaga.png" alt="Wihaga" class="w-full h-full object-cover transition-all duration-500">
+                        <!-- Pastikan file wihaga.png ada -->
+                        <img src="wihaga.png" alt="Wihaga" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
                         <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Wihaga Satwika Ghrena</h3>
-                        <p class="text-emerald-400 text-xs font-mono tracking-wider mb-2">LEAD RESEARCHER</p>
-                        <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-400 font-mono">F3401241075</span>
+                        <p class="text-emerald-300 text-xs font-mono tracking-wider mb-2">LEAD RESEARCHER</p>
+                        <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-300 font-mono">F3401241075</span>
                     </div>
                 </div>
             </div>
 
             <!-- Anggota 2 -->
             <div class="spotlight-card group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-white/0 hover:from-accent/50 hover:to-accent/5 transition-all duration-500 hover-trigger">
-                <div class="bg-[#022c22] rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden">
+                <div class="bg-[#059669]/20 rounded-[2.4rem] p-8 flex items-center gap-6 h-full relative overflow-hidden backdrop-blur-md border border-white/5">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[50px] rounded-full group-hover:bg-accent/30 transition-all"></div>
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-accent group-hover:-rotate-3 transition-all duration-500 shrink-0 shadow-2xl">
-                        <!-- Pastikan file omar.png ada di folder yang sama -->
-                        <img src="./omar.png" alt="Omar" class="w-full h-full object-cover transition-all duration-500">
+                        <!-- Pastikan file omar.png ada -->
+                        <img src="omar.png" alt="Omar" class="w-full h-full object-cover transition-all duration-500">
                     </div>
                     <div class="relative z-10 text-left">
                         <h3 class="text-xl font-bold text-white mb-1 group-hover:text-accent transition-colors font-satoshi">Aditya Omar Ardany</h3>
-                        <p class="text-emerald-400 text-xs font-mono tracking-wider mb-2">DATA ANALYST</p>
-                        <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-400 font-mono">F3401241087</span>
+                        <p class="text-emerald-300 text-xs font-mono tracking-wider mb-2">DATA ANALYST</p>
+                        <span class="inline-block px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-xs text-gray-300 font-mono">F3401241087</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 text-center border-t border-white/5 bg-[#011c15]">
+    <footer class="py-12 text-center border-t border-emerald-500/20 bg-[#043d2e]">
         <div class="flex items-center justify-center gap-3 mb-4">
             <span class="w-2 h-2 rounded-full bg-accent"></span>
-            <p class="text-xs tracking-[0.3em] text-emerald-400 uppercase font-bold">Agritech Intelligence Unit</p>
+            <p class="text-xs tracking-[0.3em] text-emerald-300 uppercase font-bold">Agritech Intelligence Unit</p>
             <span class="w-2 h-2 rounded-full bg-accent"></span>
         </div>
-        <p class="text-[10px] text-emerald-700/60 font-mono">EST. 2024 • PRECISION AGRICULTURE DATA</p>
+        <p class="text-[10px] text-emerald-500 font-mono">EST. 2024 • PRECISION AGRICULTURE DATA</p>
     </footer>
 
     <script src="script.js"></script>
